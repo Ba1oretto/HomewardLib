@@ -1,0 +1,4 @@
+name: HomewardLib
+version: '${version}'
+main: com.barroit.dev.homewardlib.HomewardLib
+api-version: 1.18
