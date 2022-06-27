@@ -1,0 +1,41 @@
+apply plugin: 'dev.barroit.specialsource'
+
+def mcversion = '1.18.2-R0.1-SNAPSHOT'
+def normalJarName = "${getRootProject().name}-${version}.jar"
+def normalJarPath = new File(project.buildDir, "libs/${normalJarName}")
+def obfuscatedJarName = "${getRootProject().name}-${version}-obf.jar"
+def obfuscatedJarPath = new File(project.buildDir, "libs/${obfuscatedJarName}")
+
+task mmtmo(type: MojangMappingToMojangObfuscated) {
+    group 'specialsource'
+    mustRunAfter publishShadowPublicationToMavenLocal
+
+    minecraftVersion.set mcversion
+    input.set normalJarPath
+}
+
+task motso(type: MojangObfuscatedToSpigotObfuscated) {
+    group 'specialsource'
+    mustRunAfter mmtmo
+
+    minecraftVersion.set mcversion
+    input.set obfuscatedJarPath
+}
+
+task copyJar(type: Copy) {
+    group 'specialsource'
+    from normalJarPath
+    into findProperty('server.plugin.folder')
+    rename {
+        findProperty('server.plugin.name')
+    }
+    mustRunAfter motso
+}
+
+task recompile {
+    group 'specialsource'
+    dependsOn publishShadowPublicationToMavenLocal
+    dependsOn mmtmo
+    dependsOn motso
+    dependsOn copyJar
+}
