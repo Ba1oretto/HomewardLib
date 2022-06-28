@@ -18,7 +18,7 @@ plugins {
 apply plugin: 'dev.barroit.specialsource'
 
 group 'dev.barroit'
-version '0.1.0-SNAPSHOT'
+version '1.0.0'
 
 repositories {
     mavenLocal()
@@ -51,12 +51,12 @@ configurations {
     }
 }
 
-def developmentVersion = '1.18.2-R0.1-SNAPSHOT'
+def nmsVersion = '1.18.2-R0.1-SNAPSHOT'
 dependencies {
     // paper minecraft
     compileOnly group: 'io.papermc.paper', name: 'paper-api', version: '1.18.2-R0.1-SNAPSHOT'
     // nms mojang mapping
-    compileOnly group: 'org.spigotmc', name: 'spigot', version: "${developmentVersion}", classifier: 'remapped-mojang'
+    compileOnly group: 'org.spigotmc', name: 'spigot', version: "${nmsVersion}", classifier: 'remapped-mojang'
 }
 
 dependencies {
@@ -68,22 +68,19 @@ dependencies {
 
     api group: 'me.mattstudios.utils', name: 'matt-framework', version: '1.4.6'
 
-    api group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+    api group: 'dev.triumphteam', name: 'triumph-gui', version: '3.1.2'
 
-    implementation group: 'dev.triumphteam', name: 'triumph-gui', version: '3.1.2'
+    api group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 }
 
 dependencies {
-    // v1_18_2
-    nmsApi group: 'org.spigotmc', name: 'spigot', version: '1.18.2-R0.1-SNAPSHOT', classifier: 'remapped-mojang'
-    // v1_19
-    nmsApi group: 'org.spigotmc', name: 'spigot', version: '1.19-R0.1-SNAPSHOT', classifier: 'remapped-mojang'
+    compileOnlyApi group: 'org.spigotmc', name: 'spigot', version: "${nmsVersion}", classifier: 'remapped-mojang'
 }
+
+apply from: 'script/basic.gradle'
 
 apply from: 'script/shadowJar.gradle'
 
-apply from: 'script/minecraftGenerated.gradle'
-
 apply from: 'script/publish.gradle'
 
-apply from: 'script/compileAll.gradle'
+apply from: 'script/compile.gradle'
