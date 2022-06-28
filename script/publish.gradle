@@ -1,0 +1,23 @@
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/ba1oretto/homewardlib")
+            credentials {
+                username = project.getProperties().get("gpr.user")
+                password = project.getProperties().get("gpr.token")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            groupId = project.group
+            artifactId = project.name
+            version = project.version
+            from(components.java)
+        }
+        shadow(MavenPublication) { publication ->
+            project.shadow.component(publication)
+        }
+    }
+}

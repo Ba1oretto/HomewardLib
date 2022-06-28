@@ -1,25 +1,24 @@
 //file:noinspection VulnerableLibrariesLocal
-//buildscript {
-//    repositories {
-//        mavenLocal()
-//    }
-//
-//    dependencies {
-//        classpath 'dev.barroit:specialsource:1.0.1'
-//    }
-//}
+buildscript {
+    repositories {
+        mavenLocal()
+    }
+
+    dependencies {
+        classpath 'dev.barroit:specialsource:1.0.1'
+    }
+}
 
 plugins {
-    id 'java'
     id 'maven-publish'
     id 'java-library'
-//    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
+
+apply plugin: 'dev.barroit.specialsource'
 
 group 'dev.barroit'
 version '0.1.0-SNAPSHOT'
-
-//apply plugin: 'dev.barroit.specialsource'
 
 repositories {
     mavenLocal()
@@ -42,15 +41,15 @@ repositories {
     }
 }
 
-//configurations {
-//    compileOnlyApi {
-//        transitive false
-//    }
-//
-//    nmsApi {
-//        extendsFrom compileOnlyApi
-//    }
-//}
+configurations {
+    compileOnlyApi {
+        transitive false
+    }
+
+    nmsApi {
+        extendsFrom compileOnlyApi
+    }
+}
 
 def developmentVersion = '1.18.2-R0.1-SNAPSHOT'
 dependencies {
@@ -58,7 +57,9 @@ dependencies {
     compileOnly group: 'io.papermc.paper', name: 'paper-api', version: '1.18.2-R0.1-SNAPSHOT'
     // nms mojang mapping
     compileOnly group: 'org.spigotmc', name: 'spigot', version: "${developmentVersion}", classifier: 'remapped-mojang'
+}
 
+dependencies {
     api group: 'org.reflections', name: 'reflections', version: '0.10.2'
 
     api group: 'de.tr7zw', name: 'item-nbt-api-plugin', version: '2.10.0'
@@ -69,71 +70,20 @@ dependencies {
 
     api group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 
-    api group: 'dev.triumphteam', name: 'triumph-gui', version: '3.1.2'
-
-//    // v1_18_2
-//    nmsApi group: 'org.spigotmc', name: 'spigot', version: '1.18.2-R0.1-SNAPSHOT', classifier: 'remapped-mojang'
-//    // v1_19
-//    nmsApi group: 'org.spigotmc', name: 'spigot', version: '1.19-R0.1-SNAPSHOT', classifier: 'remapped-mojang'
+    implementation group: 'dev.triumphteam', name: 'triumph-gui', version: '3.1.2'
 }
 
-//shadowJar {
-//    minimize()
-//    archiveBaseName.set project.name
-//    archiveClassifier.set ''
-//    archiveVersion.set project.version
-//    archiveExtension.set 'jar'
-//}
-
-// region minecraft plugin generated
-def targetJavaVersion = 17
-java {
-    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    }
+dependencies {
+    // v1_18_2
+    nmsApi group: 'org.spigotmc', name: 'spigot', version: '1.18.2-R0.1-SNAPSHOT', classifier: 'remapped-mojang'
+    // v1_19
+    nmsApi group: 'org.spigotmc', name: 'spigot', version: '1.19-R0.1-SNAPSHOT', classifier: 'remapped-mojang'
 }
 
-tasks.withType(JavaCompile).configureEach {
-    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
-        options.release = targetJavaVersion
-    }
-}
+apply from: 'script/shadowJar.gradle'
 
-processResources {
-    def props = [version: version]
-    inputs.properties props
-    filteringCharset 'UTF-8'
-    filesMatching('plugin.yml') {
-        expand props
-    }
-}
-// endregion
+apply from: 'script/minecraftGenerated.gradle'
 
-//publishing {
-//    repositories {
-//        maven {
-//            name = "GitHubPackages"
-//            url = uri("https://maven.pkg.github.com/ba1oretto/homewardlib")
-//            credentials {
-//                username = project.getProperties().get("gpr.user")
-//                password = project.getProperties().get("gpr.token")
-//            }
-//        }
-//    }
-//    publications {
-//        gpr(MavenPublication) {
-//            groupId = 'dev.barroit'
-//            artifactId = 'homewardlib'
-//            version = '0.1.0-SNAPSHOT'
-//            from(components.java)
-//        }
-//        shadow(MavenPublication) { publication ->
-//            project.shadow.component(publication)
-//        }
-//    }
-//}
-//
-//apply from: 'publish.gradle'
+apply from: 'script/publish.gradle'
+
+apply from: 'script/compileAll.gradle'
