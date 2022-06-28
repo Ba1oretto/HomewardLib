@@ -5,7 +5,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'dev.barroit:specialsource:1.0.1'
+        classpath 'com.baioretto:specialsource:1.2.0'
     }
 }
 
@@ -15,9 +15,9 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
-apply plugin: 'dev.barroit.specialsource'
+apply plugin: 'com.baioretto.specialsource'
 
-group 'dev.barroit'
+group 'com.baioretto'
 version '1.0.0'
 
 repositories {
