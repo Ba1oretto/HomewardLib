@@ -6,6 +6,7 @@ def obfuscatedJarPath = new File(project.buildDir, "libs/${obfuscatedJarName}")
 
 task mmtmo(type: MojangMappingToMojangObfuscated) {
     group 'specialsource'
+    mustRunAfter shadowJar
 
     minecraftVersion.set mcversion
     input.set normalJarPath
@@ -26,7 +27,7 @@ task copyJar(type: Copy) {
     into findProperty('server.plugin.folder')
 
     rename {
-        findProperty('server.plugin.name')
+        "${findProperty('server.plugin.name').toString().toLowerCase()}.jar"
     }
 
     mustRunAfter motso
@@ -35,6 +36,7 @@ task copyJar(type: Copy) {
 task compileAll {
     group 'specialsource'
 
+    dependsOn shadowJar
     dependsOn mmtmo
     dependsOn motso
     dependsOn copyJar

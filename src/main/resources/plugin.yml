@@ -1,4 +1,5 @@
 name: HomewardLib
 version: '${version}'
-main: dev.barroit.homewardlib.HomewardLib
+main: com.baioretto.homewardlib.HomewardLib
 api-version: 1.18
+prefix: HomewardLib
