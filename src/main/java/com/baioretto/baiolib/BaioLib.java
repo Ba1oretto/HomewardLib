@@ -1,17 +1,14 @@
-package com.baioretto.homewardlib;
+package com.baioretto.baiolib;
 
-import com.baioretto.homewardlib.test.MockTest;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import me.mattstudios.mf.base.CommandManager;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @SuppressWarnings("unused")
 @Accessors(fluent = true)
-public final class HomewardLib extends JavaPlugin {
+public final class BaioLib extends JavaPlugin {
     @Getter
-    private static HomewardLib instance;
+    private static BaioLib instance;
 
     @Override
     public void onEnable() {
@@ -20,7 +17,7 @@ public final class HomewardLib extends JavaPlugin {
         // Bukkit.getPluginManager().registerEvents(new MockTest(), this);
     }
 
-    public HomewardLib() {
+    public BaioLib() {
         instance = this;
     }
 }

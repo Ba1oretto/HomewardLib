@@ -1,4 +1,4 @@
-package com.baioretto.homewardlib.util;
+package com.baioretto.baiolib.util;
 
 import org.jetbrains.annotations.NotNull;
 

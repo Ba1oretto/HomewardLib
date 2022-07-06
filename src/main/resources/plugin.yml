@@ -1,5 +1,5 @@
-name: HomewardLib
+name: BaioLib
 version: '${version}'
-main: com.baioretto.homewardlib.HomewardLib
+main: com.baioretto.baiolib.BaioLib
 api-version: 1.18
-prefix: HomewardLib
+prefix: BaioLib

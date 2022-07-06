@@ -1,11 +1,10 @@
-package com.baioretto.homewardlib.api.packet;
+package com.baioretto.baiolib.api.packet;
 
-import com.baioretto.homewardlib.annotation.Instantiable;
+import com.baioretto.baiolib.annotation.Instantiable;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.lighting.LevelLightEngine;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.BitSet;

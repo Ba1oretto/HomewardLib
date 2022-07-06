@@ -1,4 +1,4 @@
-package com.baioretto.homewardlib.util;
+package com.baioretto.baiolib.util;
 
 public abstract class BaseUtil {
     BaseUtil() {

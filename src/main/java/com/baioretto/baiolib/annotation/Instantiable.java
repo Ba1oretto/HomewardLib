@@ -1,4 +1,4 @@
-package com.baioretto.homewardlib.annotation;
+package com.baioretto.baiolib.annotation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

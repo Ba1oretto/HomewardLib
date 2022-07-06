@@ -1,10 +1,10 @@
-package com.baioretto.homewardlib.api;
+package com.baioretto.baiolib.api;
 
-import static com.baioretto.homewardlib.util.Validate.isInstantiable;
+import static com.baioretto.baiolib.util.Validate.isInstantiable;
 
-import com.baioretto.homewardlib.annotation.Instantiable;
-import com.baioretto.homewardlib.exception.NotInstantiableException;
-import com.baioretto.homewardlib.util.ReflectionUtil;
+import com.baioretto.baiolib.annotation.Instantiable;
+import com.baioretto.baiolib.exception.NotInstantiableException;
+import com.baioretto.baiolib.util.ReflectionUtil;
 import org.bukkit.Bukkit;
 
 @SuppressWarnings("JavadocDeclaration")

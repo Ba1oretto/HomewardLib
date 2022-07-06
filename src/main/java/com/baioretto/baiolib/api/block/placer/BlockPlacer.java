@@ -1,6 +1,6 @@
-package com.baioretto.homewardlib.api.block.placer;
+package com.baioretto.baiolib.api.block.placer;
 
-import com.baioretto.homewardlib.api.Wrapper;
+import com.baioretto.baiolib.api.Wrapper;
 
 public class BlockPlacer {
     public static IBlockPlacer get() {

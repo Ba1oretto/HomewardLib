@@ -1,6 +1,6 @@
-package com.baioretto.homewardlib.api.packet;
+package com.baioretto.baiolib.api.packet;
 
-import com.baioretto.homewardlib.api.Wrapper;
+import com.baioretto.baiolib.api.Wrapper;
 
 @SuppressWarnings("unused")
 public class PacketUtil {

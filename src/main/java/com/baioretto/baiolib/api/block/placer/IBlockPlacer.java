@@ -1,6 +1,6 @@
-package com.baioretto.homewardlib.api.block.placer;
+package com.baioretto.baiolib.api.block.placer;
 
-import com.baioretto.homewardlib.annotation.Instantiable;
+import com.baioretto.baiolib.annotation.Instantiable;
 import org.bukkit.Location;
 import org.bukkit.World;
 

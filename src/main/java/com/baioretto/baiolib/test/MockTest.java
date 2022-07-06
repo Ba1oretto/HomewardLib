@@ -1,6 +1,6 @@
-package com.baioretto.homewardlib.test;
+package com.baioretto.baiolib.test;
 
-import com.baioretto.homewardlib.api.block.placer.BlockPlacer;
+import com.baioretto.baiolib.api.block.placer.BlockPlacer;
 import me.mattstudios.mf.annotations.Command;
 import me.mattstudios.mf.annotations.SubCommand;
 import me.mattstudios.mf.base.CommandBase;

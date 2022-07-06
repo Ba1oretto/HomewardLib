@@ -1,4 +1,4 @@
-package com.baioretto.homewardlib.exception;
+package com.baioretto.baiolib.exception;
 
 @SuppressWarnings("unused")
 public class NotInstantiableException extends RuntimeException {

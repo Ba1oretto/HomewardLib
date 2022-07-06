@@ -1,6 +1,6 @@
-package com.baioretto.homewardlib.api.packet.version;
+package com.baioretto.baiolib.api.packet.version;
 
-import com.baioretto.homewardlib.api.packet.IPacketUtil;
+import com.baioretto.baiolib.api.packet.IPacketUtil;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
 import net.minecraft.world.level.chunk.LevelChunk;

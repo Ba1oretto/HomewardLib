@@ -1,6 +1,6 @@
-package com.baioretto.homewardlib.api.block.util;
+package com.baioretto.baiolib.api.block.util;
 
-import com.baioretto.homewardlib.api.Wrapper;
+import com.baioretto.baiolib.api.Wrapper;
 
 @SuppressWarnings("unused")
 public class BlockUtil {

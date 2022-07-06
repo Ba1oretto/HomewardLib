@@ -1,4 +1,4 @@
-import static com.baioretto.homewardlib.util.ReflectionUtil.*;
+import static com.baioretto.baiolib.util.ReflectionUtil.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
