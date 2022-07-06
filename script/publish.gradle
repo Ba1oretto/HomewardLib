@@ -2,7 +2,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/ba1oretto/homeward-lib")
+            url = uri("https://maven.pkg.github.com/ba1oretto/baiolib")
             credentials {
                 username = findProperty("gpr.user")
                 password = findProperty("gpr.token")

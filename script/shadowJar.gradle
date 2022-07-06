@@ -2,7 +2,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 
 shadowJar {
     minimize()
-    archiveBaseName.set findProperty('server.plugin.name')
+    archiveBaseName.set rootProject.name
     archiveClassifier.set ''
     archiveVersion.set project.version
     archiveExtension.set 'jar'
