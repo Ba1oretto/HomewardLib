@@ -1,20 +1,17 @@
-package com.baioretto.homewardlib.api.blockutil;
+package com.baioretto.homewardlib.api.block.util;
 
 import com.baioretto.homewardlib.api.Wrapper;
 
 @SuppressWarnings("unused")
 public class BlockUtil {
-    /**
-     * @return IBlockUtil
-     */
-    public static IBlockUtil impl() {
+    public static IBlockUtil get() {
         return getInstance().blockUtil;
     }
 
     private final IBlockUtil blockUtil;
 
     private BlockUtil() {
-        blockUtil = Wrapper.getClassInstance(IBlockUtil.class, this);
+        blockUtil = Wrapper.getClassInstance(IBlockUtil.class);
     }
 
     private static volatile BlockUtil instance;

@@ -7,13 +7,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import static java.util.Objects.requireNonNull;
 
-@SuppressWarnings({"unused", "JavadocDeclaration", "UnusedReturnValue"})
+@SuppressWarnings({"unused", "UnusedReturnValue"})
 public class ReflectionUtil extends BaseUtil {
-    /**
-     * @param clazz
-     * @param parameterTypes
-     * @param <T>
-     */
     public static <T> Constructor<T> getConstructor(Class<T> clazz, Class<?>... parameterTypes) {
         try {
             return requireNonNull(clazz).getDeclaredConstructor(parameterTypes);
@@ -26,10 +21,6 @@ public class ReflectionUtil extends BaseUtil {
         }
     }
 
-    /**
-     * @param constructor
-     * @param parameters
-     */
     public static <T> T newInstance(Constructor<T> constructor, Object... parameters) {
         try {
             requireNonNull(constructor).setAccessible(true);
@@ -39,18 +30,10 @@ public class ReflectionUtil extends BaseUtil {
         }
     }
 
-    /**
-     * @param clazz
-     */
     public static <T> T newInstance(Class<T> clazz) {
         return newInstance(getConstructor(clazz));
     }
 
-    /**
-     * @param clazz
-     * @param parameterType
-     * @param parameter
-     */
     public static <T> T newInstance(Class<T> clazz, @NotNull Class<?> parameterType, Object... parameter) {
         return newInstance(getConstructor(clazz, parameterType), parameter);
     }

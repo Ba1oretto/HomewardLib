@@ -12,7 +12,7 @@ publishing {
     publications {
         gpr(MavenPublication) {
             groupId = project.group
-            artifactId = project.name
+            artifactId = project.name.toString().toLowerCase()
             version = project.version
             from(components.java)
         }

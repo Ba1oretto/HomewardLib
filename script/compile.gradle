@@ -27,7 +27,7 @@ task copyJar(type: Copy) {
     into findProperty('server.plugin.folder')
 
     rename {
-        "${findProperty('server.plugin.name').toString().toLowerCase()}.jar"
+        "${findProperty('server.plugin.name')}.jar"
     }
 
     mustRunAfter motso

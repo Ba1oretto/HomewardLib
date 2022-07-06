@@ -11,6 +11,13 @@ import org.bukkit.Bukkit;
 public class Wrapper {
     /**
      * @param clazz
+     */
+    public static <T> T getClassInstance(Class<T> clazz) {
+        return getClassInstance(clazz, null, false);
+    }
+
+    /**
+     * @param clazz
      * @param delegate
      */
     public static <T> T getClassInstance(Class<T> clazz, Object delegate) {
@@ -30,9 +37,12 @@ public class Wrapper {
             return null;
         }
 
-        String implementationClassName = String.format("%s.impl.%s", clazz.getPackageName(), version);
+        String implementationClassName = String.format("%s.version.%s", clazz.getPackageName(), version);
         try {
             Class<T> implementationClass = (Class<T>) Class.forName(implementationClassName);
+            if (delegate == null) {
+                return ReflectionUtil.newInstance(implementationClass);
+            }
             return ReflectionUtil.newInstance(implementationClass, delegate.getClass(), delegate);
         } catch (ClassNotFoundException e) {
             if (!ignoreError)
