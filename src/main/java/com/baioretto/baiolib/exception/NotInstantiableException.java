@@ -1,11 +1,15 @@
 package com.baioretto.baiolib.exception;
 
-@SuppressWarnings("unused")
+import lombok.NoArgsConstructor;
+
+/**
+ * The {@code NotInstantiableException} class is an exception class.
+ * 
+ * @since 1.0.0
+ * @author baioretto
+ */
+@NoArgsConstructor
 public class NotInstantiableException extends RuntimeException {
-    public NotInstantiableException() {
-
-    }
-
     public NotInstantiableException(String messages) {
         super(messages);
     }

@@ -2,6 +2,7 @@ import static com.baioretto.baiolib.util.ReflectionUtil.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
+import com.baioretto.baiolib.api.Pool;
 import org.junit.jupiter.api.*;
 
 import java.lang.reflect.Constructor;

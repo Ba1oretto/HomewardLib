@@ -1,37 +1,73 @@
 package com.baioretto.baiolib.api;
 
-import static com.baioretto.baiolib.util.Validate.isInstantiable;
+import com.baioretto.baiolib.util.Validate;
 
 import com.baioretto.baiolib.annotation.Instantiable;
 import com.baioretto.baiolib.exception.NotInstantiableException;
 import com.baioretto.baiolib.util.ReflectionUtil;
+import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 
-@SuppressWarnings("JavadocDeclaration")
+/**
+ * The {@code Wrapper} class provides a method to obtain a class instance object.
+ * All {@code methods} have the same function, just the {@code parameters} passed are different.
+ * <p>
+ * For example:
+ * <blockquote><pre>
+ *     Wrapper.getInstance(IBlockUtil.class);
+ * </pre></blockquote><p>
+ * is equivalent to:
+ * <blockquote><pre>
+ *     Wrapper.getInstance(IBlockUtil.class, instance);
+ * </pre></blockquote><p>
+ * Here are some more examples of how wrapper can be used:
+ * <blockquote><pre>
+ *     Wrapper.getInstance(IBlockUtil.class, null);
+ * </pre></blockquote>
+ *
+ * @author baioretto
+ * @since 1.0.0
+ */
+@UtilityClass
 public class Wrapper {
     /**
-     * @param clazz
+     * Return an {@code instance} of the given class.
+     *
+     * @param clazz The given class
+     * @return An instance of generic type T
+     * @throws NotInstantiableException If a class is not marked as instantiable
+     * @since 1.0.0
      */
-    public static <T> T getClassInstance(Class<T> clazz) {
-        return getClassInstance(clazz, null, false);
+    public static <T> T getInstance(Class<T> clazz) {
+        return getInstance(clazz, null);
     }
 
     /**
-     * @param clazz
-     * @param delegate
+     * Return an {@code instance} of the given class.
+     *
+     * @param clazz    The given class
+     * @param delegate The delegate object
+     * @return An instance of generic type T
+     * @throws NotInstantiableException If a class is not marked as instantiable
+     * @since 1.0.0
      */
-    public static <T> T getClassInstance(Class<T> clazz, Object delegate) {
-        return getClassInstance(clazz, delegate, false);
+    public static <T> T getInstance(Class<T> clazz, Object delegate) {
+        return getInstance(clazz, delegate, false);
     }
 
     /**
-     * @param clazz
-     * @param delegate
-     * @param ignoreError
+     * Return an {@code instance} of the given class.
+     *
+     * @param clazz       The given class
+     * @param delegate    The delegate object
+     * @param ignoreError Whether to ignore exceptions
+     * @return An instance of generic type T
+     * @throws NotInstantiableException If a class is not marked as instantiable
+     * @since 1.0.0
      */
     @SuppressWarnings("unchecked")
-    public static <T> T getClassInstance(Class<T> clazz, Object delegate, boolean ignoreError) {
-        if (!isInstantiable(clazz, Instantiable.class)) {
+    public static <T> T getInstance(Class<T> clazz, Object delegate, boolean ignoreError) {
+        if (!Validate.hasAnnotation(clazz, Instantiable.class)) {
             if (!ignoreError)
                 throw new NotInstantiableException("This class is not instantiable.");
             return null;
@@ -51,6 +87,9 @@ public class Wrapper {
         }
     }
 
+    /**
+     * The version of Minecraft
+     */
     private final static String version;
 
     static {

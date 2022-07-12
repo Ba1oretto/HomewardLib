@@ -1,26 +1,9 @@
 package com.baioretto.baiolib.api.block.util;
 
-import com.baioretto.baiolib.api.Wrapper;
+import com.baioretto.baiolib.api.AbstractUtil;
 
-@SuppressWarnings("unused")
-public class BlockUtil {
-    public static IBlockUtil get() {
-        return getInstance().blockUtil;
-    }
-
-    private final IBlockUtil blockUtil;
-
-    private BlockUtil() {
-        blockUtil = Wrapper.getClassInstance(IBlockUtil.class);
-    }
-
-    private static volatile BlockUtil instance;
-
-    private static BlockUtil getInstance() {
-        if (instance == null)
-            synchronized (BlockUtil.class) {
-                if (instance == null) return new BlockUtil();
-            }
-        return instance;
+public class BlockUtil extends AbstractUtil<IBlockUtil> {
+    protected BlockUtil() {
+        super(IBlockUtil.class);
     }
 }

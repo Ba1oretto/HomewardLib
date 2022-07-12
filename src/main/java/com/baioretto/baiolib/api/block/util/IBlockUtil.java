@@ -13,7 +13,6 @@ import org.bukkit.craftbukkit.v1_18_R2.CraftChunk;
 
 import java.util.List;
 
-@SuppressWarnings("unused")
 @Instantiable
 public interface IBlockUtil {
     BlockState getNoteBlockState(NoteBlockInstrument instrument, int note, boolean powered);

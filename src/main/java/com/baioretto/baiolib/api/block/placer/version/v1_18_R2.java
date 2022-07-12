@@ -1,11 +1,14 @@
 package com.baioretto.baiolib.api.block.placer.version;
 
 import com.baioretto.baiolib.BaioLib;
+import com.baioretto.baiolib.api.Pool;
 import com.baioretto.baiolib.api.block.placer.IBlockPlacer;
 import com.baioretto.baiolib.api.block.util.BlockUtil;
 import com.baioretto.baiolib.api.block.util.IBlockUtil;
 import com.baioretto.baiolib.api.packet.IPacketUtil;
 import com.baioretto.baiolib.api.packet.PacketUtil;
+import com.baioretto.baiolib.api.player.IPlayerUtil;
+import com.baioretto.baiolib.api.player.PlayerUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
 import net.minecraft.server.level.ThreadedLevelLightEngine;
@@ -25,8 +28,8 @@ import java.util.HashSet;
 public class v1_18_R2 implements IBlockPlacer {
     @Override
     public void placeNoteBlock(World world, int note, int x, int y, int z) {
-        IBlockUtil blockUtil = BlockUtil.get();
-        IPacketUtil packetUtil = PacketUtil.get();
+        IBlockUtil blockUtil = Pool.get(BlockUtil.class).impl();
+        IPacketUtil packetUtil = Pool.get(PacketUtil.class).impl();
 
         BlockState noteBlockState = blockUtil.getNoteBlockState(note);
         BlockPos targetBlockPosition = blockUtil.getBlockPosition(x, y, z);
@@ -46,15 +49,17 @@ public class v1_18_R2 implements IBlockPlacer {
         int dist = Bukkit.getViewDistance() + 1;
         ClientboundLevelChunkWithLightPacket chunkWithLightPacket = packetUtil.chunkWithLightPacket(levelCenterChunk, lightEngine);
 
+        IPlayerUtil playerUtil = Pool.get(PlayerUtil.class).impl();
+
         // first update player in chunk
         HashSet<CraftPlayer> updatedPlayers = new HashSet<>();
         blockUtil.getChunkNearby(craftCenterChunk).forEach(chunk -> Arrays.stream(chunk.getEntities()).filter(entity -> entity.getType().equals(EntityType.PLAYER)).forEach(entity -> {
             updatedPlayers.add((CraftPlayer) entity);
-            packetUtil.send((CraftPlayer) entity, chunkWithLightPacket);
+            playerUtil.send((CraftPlayer) entity, chunkWithLightPacket);
         }));
 
         // then all player except player in chunk
-        Bukkit.getScheduler().runTaskAsynchronously(BaioLib.instance(), () -> packetUtil.sendAll(Bukkit.getOnlinePlayers().stream(), onlinePlayer -> {
+        Bukkit.getScheduler().runTaskAsynchronously(BaioLib.instance(), () -> playerUtil.sendAll(Bukkit.getOnlinePlayers().stream(), onlinePlayer -> {
             ChunkPos chunkPosition = ((CraftPlayer) onlinePlayer).getHandle().chunkPosition();
             int chunkX = chunkPosition.x;
             int chunkZ = chunkPosition.z;
