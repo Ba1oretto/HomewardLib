@@ -2,10 +2,7 @@ package com.baioretto.baiolib.api.component;
 
 import com.baioretto.baiolib.annotation.Instantiable;
 import com.baioretto.baiolib.util.Instance;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import net.kyori.adventure.text.TextComponent;
 import net.minecraft.network.chat.MutableComponent;
 
@@ -17,20 +14,7 @@ import net.minecraft.network.chat.MutableComponent;
  */
 @Instantiable
 public interface IComponentUtil {
-    char HEX_PREFIX = '#';
     Gson GSON = Instance.getGson();
-
-    /**
-     * Decomponent the given text component.
-     *
-     * @param component The component you want to decomponent
-     * @return json formatted object
-     */
-    default JsonObject decomponent(TextComponent component) {
-        JsonObject jsonObject = JsonParser.parseString(GSON.toJson(component)).getAsJsonObject();
-        decomponent(jsonObject);
-        return jsonObject;
-    }
 
     /**
      * Get {@link MutableComponent} by {@link JsonElement}
@@ -43,7 +27,10 @@ public interface IComponentUtil {
     /**
      * Decomponent the given text component.
      *
-     * @param object The component json formatted string you want to decomponent
+     * @param component The component you want to decomponent
+     * @return json formatted object
      */
-    void decomponent(JsonObject object);
+    default JsonObject decomponent(TextComponent component) {
+        return JsonParser.parseString(GSON.getAdapter(TextComponent.class).toJson(component)).getAsJsonObject();
+    }
 }

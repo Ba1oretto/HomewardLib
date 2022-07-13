@@ -5,6 +5,7 @@ import com.baioretto.baiolib.api.component.ComponentUtil;
 import com.baioretto.baiolib.api.component.IComponentUtil;
 import com.baioretto.baiolib.api.packet.PacketUtil;
 import com.baioretto.baiolib.api.player.IPlayerUtil;
+import com.google.gson.JsonParser;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.minecraft.network.protocol.Packet;
@@ -29,13 +30,24 @@ public class v1_18_R2 implements IPlayerUtil {
     }
 
     @Override
-    public void sendMessage(Player in, Component... message) {
+    public void sendMessage(Player in, Component... messages) {
         ServerPlayer serverPlayer = ((CraftPlayer) in).getHandle();
         if (serverPlayer.isSleeping()) return;
 
         ServerGamePacketListenerImpl connection = serverPlayer.connection;
         IComponentUtil componentUtil = Pool.get(ComponentUtil.class).impl();
-        for (Component component : message)
-            connection.send(Pool.get(PacketUtil.class).impl().chatPacket(componentUtil.jsonToMinecraftComponent(componentUtil.decomponent((TextComponent) component))));
+        for (Component message : messages)
+            connection.send(Pool.get(PacketUtil.class).impl().chatPacket(componentUtil.jsonToMinecraftComponent(componentUtil.decomponent((TextComponent) message))));
+    }
+
+    @Override
+    public void sendMessage(Player in, String... messages) {
+        ServerPlayer serverPlayer = ((CraftPlayer) in).getHandle();
+        if (serverPlayer.isSleeping()) return;
+
+        ServerGamePacketListenerImpl connection = serverPlayer.connection;
+        IComponentUtil componentUtil = Pool.get(ComponentUtil.class).impl();
+        for (String message : messages)
+            connection.send(Pool.get(PacketUtil.class).impl().chatPacket(componentUtil.jsonToMinecraftComponent(JsonParser.parseString(message))));
     }
 }

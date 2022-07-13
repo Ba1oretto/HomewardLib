@@ -36,7 +36,14 @@ public interface IPlayerUtil {
     /**
      * Send {@link Player} a {@link Component} message
      * @param in the target player
-     * @param message the message
+     * @param messages the message
      */
-    void sendMessage(Player in, Component... message);
+    void sendMessage(Player in, Component... messages);
+
+    /**
+     * Send {@link Player} a {@code json format} message
+     * @param in the target player
+     * @param messages the message
+     */
+    void sendMessage(Player in, String... messages);
 }
