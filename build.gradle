@@ -41,10 +41,6 @@ dependencies {
 //    compileOnly group: 'org.spigotmc', name: 'spigot-api', version: "${minecraftVersion}" // codemc local
     compileOnly group: 'io.papermc.paper', name: 'paper-api', version: '1.18.2-R0.1-SNAPSHOT'
 
-    // junit test
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.2' // maven local
-    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.8.2' // maven local
-
     // protocol api
     compileOnly group: "com.comphenix.protocol", name: "ProtocolLib", version: "4.7.0" // dmulloy2
 
@@ -62,9 +58,6 @@ dependencies {
     // gson
     api group: 'com.google.code.gson', name: 'gson', version: '2.9.0' // maven central
 
-    // guava
-    testRuntimeOnly group: 'com.google.guava', name: 'guava', version: '31.1-jre' // maven central
-
     // command util
     api group: 'me.mattstudios.utils', name: 'matt-framework', version: '1.4.6' // maven central
 
@@ -73,6 +66,18 @@ dependencies {
 
     // commons lang3
     api group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0' // maven central
+}
+
+dependencies {
+    // guava
+    testRuntimeOnly group: 'com.google.guava', name: 'guava', version: '31.1-jre' // maven central
+
+    // gui util
+    testRuntimeOnly group: 'dev.triumphteam', name: 'triumph-gui', version: '3.1.2' // mattstudios
+
+    // junit test
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.2' // maven local
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.8.2' // maven local
 }
 
 test {

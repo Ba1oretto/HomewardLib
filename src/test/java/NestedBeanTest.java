@@ -1,16 +1,19 @@
 import bean.NestedBean;
+import com.baioretto.baiolib.config.TextComponentTypeAdapter;
 import com.baioretto.baiolib.util.Util;
 import com.google.gson.*;
+import lombok.SneakyThrows;
+import net.kyori.adventure.text.TextComponent;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 public class NestedBeanTest {
     private static final String BEAN;
     private static final Gson GSON = Util.get(() -> {
         GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(TextComponent.class, new TextComponentTypeAdapter());
         return builder.create();
     });
 
@@ -25,11 +28,16 @@ public class NestedBeanTest {
     }
 
     @Test
+    @SneakyThrows
     void test() {
-        JsonObject object = JsonParser.parseString(BEAN).getAsJsonObject();
-
-        NestedBean bean = recursion(object);
+        String test = "{\"color\":\"green\",\"extra\":[{\"bold\":true,\"color\":\"#ffc0cb\",\"text\":\"2\"},{\"extra\":[{\"hoverEvent\":{\"action\":\"show_item\",\"contents\":{\"id\":\"minecraft:paper\",\"count\":2}},\"text\":\"3.1\"}],\"text\":\"3\"}],\"text\":\"1\"}";
+        // String test = "{\"color\":\"green\",\"extra\":[{\"color\":\"#ffc0cb\",\"text\":\"2\"},{\"extra\":[{\"text\":\"3.1\"}],\"text\":\"3\"}],\"text\":\"1\"}";
+        TypeAdapter<TextComponent> adapter = GSON.getAdapter(TextComponent.class);
+        TextComponent textComponent = adapter.fromJson(test);
+        System.out.println(textComponent);
     }
+
+
 
     private NestedBean recursion(JsonElement element) {
         JsonObject object = element.getAsJsonObject();

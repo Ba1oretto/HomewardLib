@@ -6,11 +6,10 @@ import com.baioretto.baiolib.api.player.PlayerUtil;
 import com.baioretto.baiolib.config.TextComponentTypeAdapter;
 import com.baioretto.baiolib.util.Util;
 import com.baioretto.baiolib.util.Validate;
-import com.google.common.base.CaseFormat;
 import com.google.gson.*;
+import de.tr7zw.nbtapi.NBTItem;
 import lombok.SneakyThrows;
 import me.mattstudios.mf.annotations.Command;
-import me.mattstudios.mf.annotations.Default;
 import me.mattstudios.mf.annotations.SubCommand;
 import me.mattstudios.mf.base.CommandBase;
 import net.kyori.adventure.text.Component;
@@ -22,6 +21,7 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_18_R2.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_18_R2.block.CraftBlockState;
@@ -31,10 +31,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.*;
+import java.lang.reflect.Field;
+import java.util.Locale;
+import java.util.UUID;
 
 @Command("test")
 @SuppressWarnings("unused")
@@ -47,11 +49,11 @@ public class MockTest extends CommandBase implements Listener {
         if (!(commandSender instanceof Player player)) return;
 
         TextComponent textComponent = Component.text("1", NamedTextColor.GREEN)
-                    .append(Component.text("2").color(TextColor.color(255, 192, 203)).decorate(TextDecoration.BOLD))
-                    .append(Component.text("3")
-                            .append(Component.text("3.1").clickEvent(ClickEvent.openUrl("https://wiki.vg/Chat"))
-                                    .append(Component.text("3.1.1"))
-                                    .append(Component.text("3.1.2"))));
+                .append(Component.text("2").color(TextColor.color(255, 192, 203)).decorate(TextDecoration.BOLD))
+                .append(Component.text("3")
+                        .append(Component.text("3.1").clickEvent(ClickEvent.openUrl("https://wiki.vg/Chat"))
+                                .append(Component.text("3.1.1"))
+                                .append(Component.text("3.1.2"))));
 
         Pool.get(PlayerUtil.class).impl().sendMessage(player, textComponent);
     }
@@ -70,63 +72,94 @@ public class MockTest extends CommandBase implements Listener {
         Pool.get(PlayerUtil.class).impl().sendMessage(player, adapter.toJson(textComponent));
     }
 
+    @SubCommand("testComponent")
     @SneakyThrows
-    @Default
-    private TextComponent test(JsonElement element) {
-        JsonObject object = element.getAsJsonObject();
+    public synchronized void testComponent(CommandSender commandSender) {
+        if (!(commandSender instanceof Player player)) return;
 
-        TextComponent.Builder builder = Component.text();
+        ItemStack itemStack = new ItemStack(Material.PAPER);
+        itemStack.editMeta(meta -> {
+            // HoverEvent<Component> hoverEvent = HoverEvent.showText(Component.text("test"));
+            // TextComponent textComponent = Component.text("1").append(Component.text("2"));
+            TextComponent textComponent = Component.text("1", NamedTextColor.DARK_BLUE)
+                    .append(Component.text("2").color(TextColor.color(255, 192, 203)).decorate(TextDecoration.BOLD))
+                    .append(Component.text("3")
+                            .append(Component.text("3.1").hoverEvent(HoverEvent.showEntity(HoverEvent.ShowEntity.of(NamespacedKey.minecraft("zombie"), UUID.randomUUID())))));
 
-        builder.content(object.get("text").getAsString());
+            meta.displayName(textComponent);
+        });
 
-        applyBoolean(object, "bold", builder);
-        applyBoolean(object, "italic", builder);
-        applyBoolean(object, "underlined", builder);
-        applyBoolean(object, "strikethrough", builder);
-        applyBoolean(object, "obfuscated", builder);
+        System.out.println(new NBTItem(itemStack));
 
-        // JsonElement fontElement = object.get("font");
-        // if (Validate.notNull(fontElement)) {
-        //     String asString = fontElement.getAsString();
-        //     builder.font(Key.key(asString));
-        // }
+        ItemMeta itemMeta = itemStack.getItemMeta();
 
-        JsonElement colorElement = object.get("color");
-        if (Validate.notNull(colorElement)) {
-            builder.color(TextColor.fromHexString(colorElement.getAsString()));
-        }
+        Field field = Class.forName("org.bukkit.craftbukkit.v1_18_R2.inventory.CraftMetaItem").getDeclaredField("displayName");
+        field.setAccessible(true);
 
-        JsonElement insertionElement = object.get("insertion");
-        if (Validate.notNull(insertionElement)) {
-            builder.insertion(insertionElement.getAsString());
-        }
+        Object object = field.get(itemMeta);
+        String json = object.toString();
 
-        JsonElement clickEventElement = object.get("clickEvent");
-        if (Validate.notNull(clickEventElement)) {
-            JsonObject clickEventObject = clickEventElement.getAsJsonObject();
-            String action = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, clickEventObject.get("action").getAsString().toLowerCase(Locale.ROOT));
-            try {
-                Method method = ClickEvent.class.getMethod(action, String.class);
-                try {
-                    ClickEvent clickEvent = (ClickEvent) method.invoke(null, clickEventObject.get("value").getAsString());
-                    builder.clickEvent(clickEvent);
-                } catch (IllegalAccessException | InvocationTargetException ignore) {
-                }
-            } catch (NoSuchMethodException ignore) {
-            }
-        }
-
-        JsonElement hoverEventElement = object.get("hoverEvent");
-
-        JsonElement extraElement = object.get("extra");
-        if (Validate.notNull(extraElement)) {
-            List<TextComponent> componentList = new ArrayList<>();
-            extraElement.getAsJsonArray().forEach(e -> componentList.add(test(e)));
-            builder.append(componentList);
-        }
-
-        return builder.build();
+        TextComponent textComponent = gson.getAdapter(TextComponent.class).fromJson(json);
+        System.out.printf("json: %s%n", json);
+        System.out.printf("textComponent: %s%n", textComponent);
     }
+
+    // @SneakyThrows
+    // private TextComponent test(JsonElement element) {
+    //     JsonObject object = element.getAsJsonObject();
+    //
+    //     TextComponent.Builder builder = Component.text();
+    //
+    //     builder.content(object.get("text").getAsString());
+    //
+    //     applyBoolean(object, "bold", builder);
+    //     applyBoolean(object, "italic", builder);
+    //     applyBoolean(object, "underlined", builder);
+    //     applyBoolean(object, "strikethrough", builder);
+    //     applyBoolean(object, "obfuscated", builder);
+    //
+    //     // JsonElement fontElement = object.get("font");
+    //     // if (Validate.notNull(fontElement)) {
+    //     //     String asString = fontElement.getAsString();
+    //     //     builder.font(Key.key(asString));
+    //     // }
+    //
+    //     JsonElement colorElement = object.get("color");
+    //     if (Validate.notNull(colorElement)) {
+    //         builder.color(TextColor.fromHexString(colorElement.getAsString()));
+    //     }
+    //
+    //     JsonElement insertionElement = object.get("insertion");
+    //     if (Validate.notNull(insertionElement)) {
+    //         builder.insertion(insertionElement.getAsString());
+    //     }
+    //
+    //     JsonElement clickEventElement = object.get("clickEvent");
+    //     if (Validate.notNull(clickEventElement)) {
+    //         JsonObject clickEventObject = clickEventElement.getAsJsonObject();
+    //         String action = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, clickEventObject.get("action").getAsString().toLowerCase(Locale.ROOT));
+    //         try {
+    //             Method method = ClickEvent.class.getMethod(action, String.class);
+    //             try {
+    //                 ClickEvent clickEvent = (ClickEvent) method.invoke(null, clickEventObject.get("value").getAsString());
+    //                 builder.clickEvent(clickEvent);
+    //             } catch (IllegalAccessException | InvocationTargetException ignore) {
+    //             }
+    //         } catch (NoSuchMethodException ignore) {
+    //         }
+    //     }
+    //
+    //     JsonElement hoverEventElement = object.get("hoverEvent");
+    //
+    //     JsonElement extraElement = object.get("extra");
+    //     if (Validate.notNull(extraElement)) {
+    //         List<TextComponent> componentList = new ArrayList<>();
+    //         extraElement.getAsJsonArray().forEach(e -> componentList.add(test(e)));
+    //         builder.append(componentList);
+    //     }
+    //
+    //     return builder.build();
+    // }
 
     private void applyBoolean(JsonObject object, String name, TextComponent.Builder builder) {
         JsonElement element = object.get(name);
