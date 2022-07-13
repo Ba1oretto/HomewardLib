@@ -2,6 +2,9 @@ package com.baioretto.baiolib.command;
 
 import com.baioretto.baiolib.api.Pool;
 import com.baioretto.baiolib.api.block.placer.BlockPlacer;
+import com.baioretto.baiolib.api.extension.meta.ItemMetaImpl;
+import com.baioretto.baiolib.api.extension.stack.ItemStackImpl;
+import com.baioretto.baiolib.api.player.PlayerImpl;
 import com.baioretto.baiolib.api.player.PlayerUtil;
 import com.baioretto.baiolib.config.TextComponentTypeAdapter;
 import com.baioretto.baiolib.util.Util;
@@ -9,9 +12,11 @@ import com.baioretto.baiolib.util.Validate;
 import com.google.gson.*;
 import de.tr7zw.nbtapi.NBTItem;
 import lombok.SneakyThrows;
+import lombok.experimental.ExtensionMethod;
 import me.mattstudios.mf.annotations.Command;
 import me.mattstudios.mf.annotations.SubCommand;
 import me.mattstudios.mf.base.CommandBase;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -40,7 +45,7 @@ import java.util.UUID;
 
 @Command("test")
 @SuppressWarnings("unused")
-// @ExtensionMethod({ItemStackImpl.class, ItemMetaImpl.class, PlayerImpl.class})
+@ExtensionMethod({ItemStackImpl.class, ItemMetaImpl.class, PlayerImpl.class})
 public class MockTest extends CommandBase implements Listener {
     private final Gson gson = Util.get(() -> new GsonBuilder().registerTypeAdapter(TextComponent.class, new TextComponentTypeAdapter()).create());
 
@@ -62,7 +67,7 @@ public class MockTest extends CommandBase implements Listener {
     public void testDecomponentV1(CommandSender commandSender) {
         if (!(commandSender instanceof Player player)) return;
 
-        HoverEvent<HoverEvent.ShowItem> hoverEvent = HoverEvent.showItem(HoverEvent.ShowItem.of(Material.PAPER.getKey(), 2));
+        HoverEvent<HoverEvent.ShowItem> hoverEvent = HoverEvent.showItem(HoverEvent.ShowItem.of(Key.key("minecraft:paper"), 2));
         // HoverEvent<Component> hoverEvent = HoverEvent.showText(Component.text("www"));
         // HoverEvent<HoverEvent.ShowEntity> hoverEvent = HoverEvent.showEntity(NamespacedKey.minecraft("zombie"), UUID.randomUUID(), Component.text("test", TextColor.color(255, 192, 203)));
         ClickEvent clickEvent = ClickEvent.openUrl("https://github.com/Ba1oretto");
@@ -84,7 +89,7 @@ public class MockTest extends CommandBase implements Listener {
             TextComponent textComponent = Component.text("1", NamedTextColor.DARK_BLUE)
                     .append(Component.text("2").color(TextColor.color(255, 192, 203)).decorate(TextDecoration.BOLD))
                     .append(Component.text("3")
-                            .append(Component.text("3.1").hoverEvent(HoverEvent.showEntity(HoverEvent.ShowEntity.of(NamespacedKey.minecraft("zombie"), UUID.randomUUID())))));
+                            .append(Component.text("3.1").hoverEvent(HoverEvent.showEntity(HoverEvent.ShowEntity.of(Key.key("minecraft:zombie"), UUID.randomUUID())))));
 
             meta.displayName(textComponent);
         });
@@ -102,6 +107,8 @@ public class MockTest extends CommandBase implements Listener {
         TextComponent textComponent = gson.getAdapter(TextComponent.class).fromJson(json);
         System.out.printf("json: %s%n", json);
         System.out.printf("textComponent: %s%n", textComponent);
+
+        Pool.get(PlayerUtil.class).impl().sendMessage(player, textComponent);
     }
 
     // @SneakyThrows

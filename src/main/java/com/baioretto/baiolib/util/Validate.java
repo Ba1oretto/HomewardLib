@@ -19,7 +19,7 @@ public class Validate {
     /**
      * Check if the specific class has this annotation.
      *
-     * @param clazz The class you want to check
+     * @param clazz      The class you want to check
      * @param annotation The annotation class should have
      * @return true if The class has that annotation
      * @throws NullPointerException if given parameter is null
@@ -57,5 +57,18 @@ public class Validate {
      */
     public boolean matchesBoolean(String string) {
         return string.matches("(?i)true|false");
+    }
+
+
+    /**
+     * Get a {@code boolean} value from given {@link String}.
+     *
+     * @param string The string you want to convert
+     * @return boolean
+     * @throws IllegalArgumentException if the given {@link String} cannot convert to boolean.
+     */
+    public boolean getBoolean(String string) {
+        if (!matchesBoolean(string)) throw new IllegalArgumentException();
+        return Boolean.parseBoolean(string);
     }
 }

@@ -18,7 +18,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.NamespacedKey;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -55,6 +54,7 @@ public class TextComponentTypeAdapter extends TypeAdapter<TextComponent> {
         }
     }
 
+    @SuppressWarnings("PatternValidation")
     private TextComponent stringToTextComponent(JsonReader in) throws IOException {
         TextComponent.Builder builder = Component.text();
 
@@ -80,11 +80,11 @@ public class TextComponentTypeAdapter extends TypeAdapter<TextComponent> {
 
                 case BOLD, ITALIC, UNDERLINED, STRIKETHROUGH, OBFUSCATED -> {
                     TextDecoration decoration = TextDecoration.valueOf(chatField.asString().toUpperCase(Locale.ROOT));
-                    boolean flag = in.nextBoolean();
-                    builder.decoration(decoration, flag);
+                    String flag = in.nextString();
+                    builder.decoration(decoration, Validate.getBoolean(flag));
                 }
 
-                case FONT -> builder.font(NamespacedKey.fromString(in.nextString()));
+                case FONT -> builder.font(Key.key(in.nextString()));
                 case COLOR -> {
                     String colorCode = in.nextString();
                     try {
@@ -186,8 +186,7 @@ public class TextComponentTypeAdapter extends TypeAdapter<TextComponent> {
 
                                         if (id != null) {
                                             try {
-
-                                                hoverEvent = (HoverEvent<?>) HoverEvent.class.getMethod(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, action.asString()), Key.class, int.class).invoke(null, NamespacedKey.fromString(id), count);
+                                                hoverEvent = (HoverEvent<?>) HoverEvent.class.getMethod(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, action.asString()), Key.class, int.class).invoke(null, Key.key(id), count);
                                             } catch (NoSuchMethodException | IllegalAccessException |
                                                      InvocationTargetException ignore) {
                                                 System.out.println(2222);
@@ -217,7 +216,7 @@ public class TextComponentTypeAdapter extends TypeAdapter<TextComponent> {
 
                                         if (id != null && type != null) {
                                             try {
-                                                hoverEvent = (HoverEvent<?>) HoverEvent.class.getMethod(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, action.asString()), Key.class, UUID.class).invoke(null, NamespacedKey.fromString(type), id);
+                                                hoverEvent = (HoverEvent<?>) HoverEvent.class.getMethod(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, action.asString()), Key.class, UUID.class).invoke(null, Key.key(type), id);
                                             } catch (NoSuchMethodException | IllegalAccessException |
                                                      InvocationTargetException ignore) {
                                                 System.out.println(2222);
