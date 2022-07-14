@@ -6,8 +6,6 @@ import com.baioretto.baiolib.api.extension.meta.ItemMetaImpl;
 import com.baioretto.baiolib.api.extension.stack.ItemStackImpl;
 import com.baioretto.baiolib.api.player.PlayerImpl;
 import com.baioretto.baiolib.api.player.PlayerUtil;
-import com.baioretto.baiolib.config.TextComponentTypeAdapter;
-import com.baioretto.baiolib.util.Util;
 import com.baioretto.baiolib.util.Validate;
 import com.google.gson.*;
 import de.tr7zw.nbtapi.NBTItem;
@@ -24,9 +22,9 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_18_R2.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_18_R2.block.CraftBlockState;
@@ -47,8 +45,6 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 @ExtensionMethod({ItemStackImpl.class, ItemMetaImpl.class, PlayerImpl.class})
 public class MockTest extends CommandBase implements Listener {
-    private final Gson gson = Util.get(() -> new GsonBuilder().registerTypeAdapter(TextComponent.class, new TextComponentTypeAdapter()).create());
-
     @SubCommand("testDecomponentV2")
     public void testDecomponentV2(CommandSender commandSender) {
         if (!(commandSender instanceof Player player)) return;
@@ -66,15 +62,12 @@ public class MockTest extends CommandBase implements Listener {
     @SubCommand("testDecomponentV1")
     public void testDecomponentV1(CommandSender commandSender) {
         if (!(commandSender instanceof Player player)) return;
+        TextComponent textComponent = Component.text("1", NamedTextColor.DARK_BLUE)
+                .append(Component.text("2").color(TextColor.color(255, 192, 203)).decorate(TextDecoration.BOLD))
+                .append(Component.text("3")
+                        .append(Component.text("3.1").hoverEvent(HoverEvent.showEntity(HoverEvent.ShowEntity.of(Key.key("minecraft:zombie"), UUID.randomUUID())))));
 
-        HoverEvent<HoverEvent.ShowItem> hoverEvent = HoverEvent.showItem(HoverEvent.ShowItem.of(Key.key("minecraft:paper"), 2));
-        // HoverEvent<Component> hoverEvent = HoverEvent.showText(Component.text("www"));
-        // HoverEvent<HoverEvent.ShowEntity> hoverEvent = HoverEvent.showEntity(NamespacedKey.minecraft("zombie"), UUID.randomUUID(), Component.text("test", TextColor.color(255, 192, 203)));
-        ClickEvent clickEvent = ClickEvent.openUrl("https://github.com/Ba1oretto");
-        TextComponent textComponent = Component.text("1").hoverEvent(hoverEvent);
-
-        TypeAdapter<TextComponent> adapter = gson.getAdapter(TextComponent.class);
-        Pool.get(PlayerUtil.class).impl().sendMessage(player, adapter.toJson(textComponent));
+        Pool.get(PlayerUtil.class).impl().sendMessage(player, textComponent);
     }
 
     @SubCommand("testComponent")
@@ -84,8 +77,6 @@ public class MockTest extends CommandBase implements Listener {
 
         ItemStack itemStack = new ItemStack(Material.PAPER);
         itemStack.editMeta(meta -> {
-            // HoverEvent<Component> hoverEvent = HoverEvent.showText(Component.text("test"));
-            // TextComponent textComponent = Component.text("1").append(Component.text("2"));
             TextComponent textComponent = Component.text("1", NamedTextColor.DARK_BLUE)
                     .append(Component.text("2").color(TextColor.color(255, 192, 203)).decorate(TextDecoration.BOLD))
                     .append(Component.text("3")
@@ -104,69 +95,14 @@ public class MockTest extends CommandBase implements Listener {
         Object object = field.get(itemMeta);
         String json = object.toString();
 
-        TextComponent textComponent = gson.getAdapter(TextComponent.class).fromJson(json);
         System.out.printf("json: %s%n", json);
-        System.out.printf("textComponent: %s%n", textComponent);
 
-        Pool.get(PlayerUtil.class).impl().sendMessage(player, textComponent);
+        Component component = GsonComponentSerializer.gson().deserialize(json);
+
+        System.out.printf("textComponent: %s%n", component);
+
+        Pool.get(PlayerUtil.class).impl().sendMessage(player, component);
     }
-
-    // @SneakyThrows
-    // private TextComponent test(JsonElement element) {
-    //     JsonObject object = element.getAsJsonObject();
-    //
-    //     TextComponent.Builder builder = Component.text();
-    //
-    //     builder.content(object.get("text").getAsString());
-    //
-    //     applyBoolean(object, "bold", builder);
-    //     applyBoolean(object, "italic", builder);
-    //     applyBoolean(object, "underlined", builder);
-    //     applyBoolean(object, "strikethrough", builder);
-    //     applyBoolean(object, "obfuscated", builder);
-    //
-    //     // JsonElement fontElement = object.get("font");
-    //     // if (Validate.notNull(fontElement)) {
-    //     //     String asString = fontElement.getAsString();
-    //     //     builder.font(Key.key(asString));
-    //     // }
-    //
-    //     JsonElement colorElement = object.get("color");
-    //     if (Validate.notNull(colorElement)) {
-    //         builder.color(TextColor.fromHexString(colorElement.getAsString()));
-    //     }
-    //
-    //     JsonElement insertionElement = object.get("insertion");
-    //     if (Validate.notNull(insertionElement)) {
-    //         builder.insertion(insertionElement.getAsString());
-    //     }
-    //
-    //     JsonElement clickEventElement = object.get("clickEvent");
-    //     if (Validate.notNull(clickEventElement)) {
-    //         JsonObject clickEventObject = clickEventElement.getAsJsonObject();
-    //         String action = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, clickEventObject.get("action").getAsString().toLowerCase(Locale.ROOT));
-    //         try {
-    //             Method method = ClickEvent.class.getMethod(action, String.class);
-    //             try {
-    //                 ClickEvent clickEvent = (ClickEvent) method.invoke(null, clickEventObject.get("value").getAsString());
-    //                 builder.clickEvent(clickEvent);
-    //             } catch (IllegalAccessException | InvocationTargetException ignore) {
-    //             }
-    //         } catch (NoSuchMethodException ignore) {
-    //         }
-    //     }
-    //
-    //     JsonElement hoverEventElement = object.get("hoverEvent");
-    //
-    //     JsonElement extraElement = object.get("extra");
-    //     if (Validate.notNull(extraElement)) {
-    //         List<TextComponent> componentList = new ArrayList<>();
-    //         extraElement.getAsJsonArray().forEach(e -> componentList.add(test(e)));
-    //         builder.append(componentList);
-    //     }
-    //
-    //     return builder.build();
-    // }
 
     private void applyBoolean(JsonObject object, String name, TextComponent.Builder builder) {
         JsonElement element = object.get(name);

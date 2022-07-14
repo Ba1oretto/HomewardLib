@@ -1,6 +1,7 @@
 package com.baioretto.baiolib.api.extension.meta;
 
 import com.baioretto.baiolib.annotation.Instantiable;
+import com.baioretto.baiolib.exception.BaioLibInternalException;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -24,7 +25,7 @@ public abstract class IItemMeta {
             try {
                 craftMetaItemClass = Class.forName(className);
             } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
+                throw new BaioLibInternalException(e);
             }
         }
 
@@ -32,7 +33,7 @@ public abstract class IItemMeta {
             try {
                 displayNameField = craftMetaItemClass.getDeclaredField(displayNameFieldName);
             } catch (NoSuchFieldException e) {
-                throw new RuntimeException(e);
+                throw new BaioLibInternalException(e);
             }
             displayNameField.setAccessible(true);
         }
@@ -41,7 +42,7 @@ public abstract class IItemMeta {
             try {
                 loreField = craftMetaItemClass.getDeclaredField(loreFieldName);
             } catch (NoSuchFieldException e) {
-                throw new RuntimeException(e);
+                throw new BaioLibInternalException(e);
             }
             loreField.setAccessible(true);
         }

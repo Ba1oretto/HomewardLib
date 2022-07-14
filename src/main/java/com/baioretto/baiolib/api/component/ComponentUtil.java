@@ -8,6 +8,7 @@ import com.baioretto.baiolib.api.AbstractUtil;
  * @author baioretto
  * @since 1.1.0
  */
+@Deprecated
 public class ComponentUtil extends AbstractUtil<IComponentUtil> {
     public ComponentUtil() {
         super(IComponentUtil.class);

@@ -18,6 +18,7 @@ import java.util.UUID;
  * @since 1.0.0
  */
 @Instantiable
+@SuppressWarnings("unused")
 public interface IPacketUtil {
     /**
      * Get {@link ClientboundLevelChunkWithLightPacket} from given parameters
@@ -29,6 +30,7 @@ public interface IPacketUtil {
     default ClientboundLevelChunkWithLightPacket chunkWithLightPacket(LevelChunk chunk, LevelLightEngine lightEngine) {
         return chunkWithLightPacket(chunk, lightEngine, null, null, false);
     }
+
     /**
      * Get {@link ClientboundLevelChunkWithLightPacket} from given parameters
      *
@@ -55,11 +57,9 @@ public interface IPacketUtil {
      * Get {@link ClientboundChatPacket} by {@link Component}
      *
      * @param component the {@link Component} message
-     * @param chatType the {@link ChatType}
-     * @param uuid the {@link UUID}
+     * @param chatType  the {@link ChatType}
+     * @param uuid      the {@link UUID}
      * @return {@link ClientboundChatPacket}
      */
     ClientboundChatPacket chatPacket(Component component, ChatType chatType, UUID uuid);
 }
-
-

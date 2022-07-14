@@ -15,6 +15,7 @@ import java.util.stream.Stream;
  * @since 1.1.0
  */
 @Instantiable
+@SuppressWarnings("unused")
 public interface IPlayerUtil {
     /**
      * Send {@link Player} a {@link Packet}

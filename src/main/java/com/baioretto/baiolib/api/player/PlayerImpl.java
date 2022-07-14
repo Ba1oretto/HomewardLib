@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
  * @author baioretto
  * @since 1.1.0
  */
+@SuppressWarnings("unused")
 public class PlayerImpl {
     /**
      * Send {@link Player} a {@link Component} message

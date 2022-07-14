@@ -1,13 +1,10 @@
 package com.baioretto.baiolib.api.player.version;
 
 import com.baioretto.baiolib.api.Pool;
-import com.baioretto.baiolib.api.component.ComponentUtil;
-import com.baioretto.baiolib.api.component.IComponentUtil;
 import com.baioretto.baiolib.api.packet.PacketUtil;
 import com.baioretto.baiolib.api.player.IPlayerUtil;
-import com.google.gson.JsonParser;
+import com.baioretto.baiolib.util.ComponentSerializer;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
@@ -31,23 +28,21 @@ public class v1_18_R2 implements IPlayerUtil {
 
     @Override
     public void sendMessage(Player in, Component... messages) {
-        ServerPlayer serverPlayer = ((CraftPlayer) in).getHandle();
-        if (serverPlayer.isSleeping()) return;
+        ServerPlayer player = ((CraftPlayer) in).getHandle();
+        if (player.isSleeping()) return;
 
-        ServerGamePacketListenerImpl connection = serverPlayer.connection;
-        IComponentUtil componentUtil = Pool.get(ComponentUtil.class).impl();
+        ServerGamePacketListenerImpl playerConnection = player.connection;
         for (Component message : messages)
-            connection.send(Pool.get(PacketUtil.class).impl().chatPacket(componentUtil.jsonToMinecraftComponent(componentUtil.decomponent((TextComponent) message))));
+            playerConnection.send(Pool.get(PacketUtil.class).impl().chatPacket(ComponentSerializer.serializeToMinecraft(message)));
     }
 
     @Override
     public void sendMessage(Player in, String... messages) {
-        ServerPlayer serverPlayer = ((CraftPlayer) in).getHandle();
-        if (serverPlayer.isSleeping()) return;
+        ServerPlayer player = ((CraftPlayer) in).getHandle();
+        if (player.isSleeping()) return;
 
-        ServerGamePacketListenerImpl connection = serverPlayer.connection;
-        IComponentUtil componentUtil = Pool.get(ComponentUtil.class).impl();
+        ServerGamePacketListenerImpl playerConnection = player.connection;
         for (String message : messages)
-            connection.send(Pool.get(PacketUtil.class).impl().chatPacket(componentUtil.jsonToMinecraftComponent(JsonParser.parseString(message))));
+            playerConnection.send(Pool.get(PacketUtil.class).impl().chatPacket(ComponentSerializer.serializeToMinecraft(message)));
     }
 }

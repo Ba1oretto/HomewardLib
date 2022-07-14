@@ -2,7 +2,6 @@ package com.baioretto.baiolib.api;
 
 import com.baioretto.baiolib.api.block.placer.BlockPlacer;
 import com.baioretto.baiolib.api.block.util.BlockUtil;
-import com.baioretto.baiolib.api.component.ComponentUtil;
 import com.baioretto.baiolib.api.extension.meta.PaperItemMeta;
 import com.baioretto.baiolib.api.extension.stack.PaperItemStack;
 import com.baioretto.baiolib.api.packet.PacketUtil;
@@ -18,7 +17,6 @@ import com.google.common.base.CaseFormat;
  */
 @SuppressWarnings("unused")
 public class Pool {
-    private static volatile ComponentUtil componentUtil;
     private static volatile PacketUtil packetUtil;
     private static volatile BlockPlacer blockPlacer;
     private static volatile BlockUtil blockUtil;

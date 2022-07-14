@@ -1,10 +1,11 @@
 package com.baioretto.baiolib.api.component;
 
 import com.baioretto.baiolib.annotation.Instantiable;
-import com.baioretto.baiolib.util.Instance;
+import com.baioretto.baiolib.util.Util;
 import com.google.gson.*;
 import net.kyori.adventure.text.TextComponent;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.LowerCaseEnumTypeAdapterFactory;
 
 /**
  * The {@code IComponentUtil} class allow you convert component to json object.
@@ -13,8 +14,13 @@ import net.minecraft.network.chat.MutableComponent;
  * @since 1.1.0
  */
 @Instantiable
+@SuppressWarnings("unused")
 public interface IComponentUtil {
-    Gson GSON = Instance.getGson();
+    Gson GSON = Util.get(() -> {
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapterFactory(new LowerCaseEnumTypeAdapterFactory());
+        return builder.create();
+    });
 
     /**
      * Get {@link MutableComponent} by {@link JsonElement}

@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 @Instantiable
+@SuppressWarnings("unused")
 public interface IBlockPlacer {
     void placeNoteBlock(World world, int note, int x, int y, int z);
 

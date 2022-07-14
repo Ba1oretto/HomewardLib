@@ -1,11 +1,9 @@
 package com.baioretto.baiolib.api.extension.meta.version;
 
-import com.baioretto.baiolib.api.Pool;
-import com.baioretto.baiolib.api.component.ComponentUtil;
-import com.baioretto.baiolib.api.component.IComponentUtil;
 import com.baioretto.baiolib.api.extension.meta.IItemMeta;
+import com.baioretto.baiolib.util.ComponentSerializer;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
@@ -20,7 +18,7 @@ public class v1_18_R2 extends IItemMeta {
     @Override
     public void displayName(ItemMeta in, Component displayName) {
         try {
-            displayNameField.set(in, Pool.get(ComponentUtil.class).impl().decomponent((TextComponent) displayName).toString());
+            displayNameField.set(in, GsonComponentSerializer.gson().serialize(displayName));
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
@@ -28,9 +26,8 @@ public class v1_18_R2 extends IItemMeta {
 
     @Override
     public void lore(ItemMeta in, List<Component> lore) {
-        IComponentUtil componentUtil = Pool.get(ComponentUtil.class).impl();
         List<String> loreList = new ArrayList<>();
-        lore.forEach(l -> loreList.add(componentUtil.decomponent((TextComponent) l).toString()));
+        lore.forEach(component -> loreList.add(ComponentSerializer.serialize(component)));
 
         try {
             loreField.set(in, loreList);

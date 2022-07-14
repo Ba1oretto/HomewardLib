@@ -32,9 +32,11 @@ import static java.util.Objects.nonNull;
 /**
  * The {@code TextComponentTypeAdapter} class allows you to convert between {@link TextComponent} and {@code JSON string} at any time.
  *
+ * @deprecated
  * @author baioretto
  * @since 1.1.0
  */
+@Deprecated
 public class TextComponentTypeAdapter extends TypeAdapter<TextComponent> {
     @Override
     public void write(JsonWriter out, TextComponent value) {
