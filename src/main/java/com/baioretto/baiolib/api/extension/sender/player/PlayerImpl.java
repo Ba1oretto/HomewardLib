@@ -1,6 +1,7 @@
-package com.baioretto.baiolib.api.player;
+package com.baioretto.baiolib.api.extension.sender.player;
 
 import com.baioretto.baiolib.api.Pool;
+import com.baioretto.baiolib.api.player.PlayerUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 
@@ -18,6 +19,6 @@ public class PlayerImpl {
      * @param message the message
      */
     public static void sendMessage(Player in, Component message) {
-        Pool.get(PlayerUtil.class).impl().sendMessage(in, message);
+        Pool.get(PaperPlayer.class).impl().sendMessage(in, message);
     }
 }

@@ -1,13 +1,14 @@
 package com.baioretto.baiolib.command;
 
+import com.baioretto.baiolib.BaioLib;
 import com.baioretto.baiolib.api.Pool;
 import com.baioretto.baiolib.api.block.placer.BlockPlacer;
+import com.baioretto.baiolib.api.extension.bukkit.BukkitImpl;
 import com.baioretto.baiolib.api.extension.meta.ItemMetaImpl;
+import com.baioretto.baiolib.api.extension.sender.command.ConsoleCommandSenderImpl;
+import com.baioretto.baiolib.api.extension.sender.player.PaperPlayer;
 import com.baioretto.baiolib.api.extension.stack.ItemStackImpl;
-import com.baioretto.baiolib.api.player.PlayerImpl;
-import com.baioretto.baiolib.api.player.PlayerUtil;
-import com.baioretto.baiolib.util.Validate;
-import com.google.gson.*;
+import com.baioretto.baiolib.api.extension.sender.player.PlayerImpl;
 import de.tr7zw.nbtapi.NBTItem;
 import lombok.SneakyThrows;
 import lombok.experimental.ExtensionMethod;
@@ -38,15 +39,54 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.lang.reflect.Field;
-import java.util.Locale;
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Command("test")
 @SuppressWarnings("unused")
-@ExtensionMethod({ItemStackImpl.class, ItemMetaImpl.class, PlayerImpl.class})
+@ExtensionMethod({ItemStackImpl.class, ItemMetaImpl.class, PlayerImpl.class, ConsoleCommandSenderImpl.class, BukkitImpl.class})
 public class MockTest extends CommandBase implements Listener {
-    @SubCommand("testDecomponentV2")
-    public void testDecomponentV2(CommandSender commandSender) {
+    @SubCommand("iConsoleCommandSender$sendMessage")
+    public void iConsoleCommandSender$sendMessage(CommandSender commandSender) {
+        if (!(commandSender instanceof Player player)) return;
+        BaioLib.instance().getServer().getConsoleSender().sendMessage(Component.text("test", NamedTextColor.AQUA));
+    }
+
+    @SubCommand("testItemMeta")
+    public void testItemMeta(CommandSender commandSender) {
+        if (!(commandSender instanceof Player player)) return;
+
+        ItemStack itemStack = new ItemStack(Material.PAPER);
+        itemStack.editMeta(meta -> {
+            // meta.displayName(Component.text("test"));
+            // System.out.println(meta.displayName());
+
+            ArrayList<Component> components = new ArrayList<>();
+            for (int i = 0; i < 10; i++) {
+                components.add(Component.text(String.format("line: %s", i)));
+            }
+
+            meta.lore(components);
+
+            System.out.println(meta.lore());
+        });
+
+        player.getInventory().addItem(itemStack);
+    }
+
+    @SubCommand("testSerializeV1")
+    public void testSerializeV1(CommandSender commandSender) {
+        if (!(commandSender instanceof Player player)) return;
+        TextComponent textComponent = Component.text("1", NamedTextColor.DARK_BLUE)
+                .append(Component.text("2").color(TextColor.color(255, 192, 203)).decorate(TextDecoration.BOLD))
+                .append(Component.text("3")
+                        .append(Component.text("3.1").hoverEvent(HoverEvent.showEntity(HoverEvent.ShowEntity.of(Key.key("minecraft:zombie"), UUID.randomUUID())))));
+
+        Pool.get(PaperPlayer.class).impl().sendMessage(player, textComponent);
+    }
+
+    @SubCommand("testSerializeV2")
+    public void testSerializeV2(CommandSender commandSender) {
         if (!(commandSender instanceof Player player)) return;
 
         TextComponent textComponent = Component.text("1", NamedTextColor.GREEN)
@@ -56,23 +96,12 @@ public class MockTest extends CommandBase implements Listener {
                                 .append(Component.text("3.1.1"))
                                 .append(Component.text("3.1.2"))));
 
-        Pool.get(PlayerUtil.class).impl().sendMessage(player, textComponent);
+        Pool.get(PaperPlayer.class).impl().sendMessage(player, textComponent);
     }
 
-    @SubCommand("testDecomponentV1")
-    public void testDecomponentV1(CommandSender commandSender) {
-        if (!(commandSender instanceof Player player)) return;
-        TextComponent textComponent = Component.text("1", NamedTextColor.DARK_BLUE)
-                .append(Component.text("2").color(TextColor.color(255, 192, 203)).decorate(TextDecoration.BOLD))
-                .append(Component.text("3")
-                        .append(Component.text("3.1").hoverEvent(HoverEvent.showEntity(HoverEvent.ShowEntity.of(Key.key("minecraft:zombie"), UUID.randomUUID())))));
-
-        Pool.get(PlayerUtil.class).impl().sendMessage(player, textComponent);
-    }
-
-    @SubCommand("testComponent")
+    @SubCommand("testDeserialize")
     @SneakyThrows
-    public synchronized void testComponent(CommandSender commandSender) {
+    public void testDeserialize(CommandSender commandSender) {
         if (!(commandSender instanceof Player player)) return;
 
         ItemStack itemStack = new ItemStack(Material.PAPER);
@@ -101,14 +130,7 @@ public class MockTest extends CommandBase implements Listener {
 
         System.out.printf("textComponent: %s%n", component);
 
-        Pool.get(PlayerUtil.class).impl().sendMessage(player, component);
-    }
-
-    private void applyBoolean(JsonObject object, String name, TextComponent.Builder builder) {
-        JsonElement element = object.get(name);
-        if (Validate.notNull(element) && Validate.matchesBoolean(element.getAsString())) {
-            builder.decoration(TextDecoration.valueOf(name.toUpperCase(Locale.ROOT)), element.getAsBoolean());
-        }
+        Pool.get(PaperPlayer.class).impl().sendMessage(player, component);
     }
 
     @SubCommand("get")

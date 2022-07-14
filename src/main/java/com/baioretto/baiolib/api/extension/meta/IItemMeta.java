@@ -4,6 +4,7 @@ import com.baioretto.baiolib.annotation.Instantiable;
 import com.baioretto.baiolib.exception.BaioLibInternalException;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -63,4 +64,20 @@ public abstract class IItemMeta {
      * @param lore the lore list {@link Component}
      */
     protected abstract void lore(ItemMeta in, List<Component> lore);
+
+    /**
+     * Get meta lore list.
+     *
+     * @param in   the {@link ItemMeta} instance
+     * @return null if no lore exist, otherwise return component list
+     */
+    protected abstract @Nullable List<Component> lore(ItemMeta in);
+
+    /**
+     * Set meta display name list.
+     *
+     * @param in   the {@link ItemMeta} instance
+     * @return null if no display name can be cast to component, otherwise return component
+     */
+    protected abstract @Nullable Component displayName(ItemMeta in);
 }

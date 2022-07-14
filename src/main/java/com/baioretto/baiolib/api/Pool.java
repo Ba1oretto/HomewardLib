@@ -3,6 +3,8 @@ package com.baioretto.baiolib.api;
 import com.baioretto.baiolib.api.block.placer.BlockPlacer;
 import com.baioretto.baiolib.api.block.util.BlockUtil;
 import com.baioretto.baiolib.api.extension.meta.PaperItemMeta;
+import com.baioretto.baiolib.api.extension.sender.command.PaperConsoleCommandSender;
+import com.baioretto.baiolib.api.extension.sender.player.PaperPlayer;
 import com.baioretto.baiolib.api.extension.stack.PaperItemStack;
 import com.baioretto.baiolib.api.packet.PacketUtil;
 import com.baioretto.baiolib.api.player.PlayerUtil;
@@ -23,6 +25,8 @@ public class Pool {
     private static volatile PaperItemStack paperItemStack;
     private static volatile PaperItemMeta paperItemMeta;
     private static volatile PlayerUtil playerUtil;
+    private static volatile PaperPlayer paperPlayer;
+    private static volatile PaperConsoleCommandSender paperConsoleCommandSender;
 
     /**
      * Get an instance of generic type T.

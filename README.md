@@ -1,0 +1,5 @@
+![](https://img.shields.io/tokei/lines/github/Ba1oretto/BaioLib?style=plastic)
+![](https://img.shields.io/github/license/Ba1oretto/BaioLib?style=plastic)
+![](https://img.shields.io/github/v/release/Ba1oretto/BaioLib?style=plastic)
+![](https://img.shields.io/github/last-commit/Ba1oretto/BaioLib?style=plastic)
+![](https://img.shields.io/github/languages/top/Ba1oretto/BaioLib?style=plastic)

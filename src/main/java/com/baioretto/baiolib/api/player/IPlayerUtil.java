@@ -33,18 +33,4 @@ public interface IPlayerUtil {
      * @param <M> the generic type extend from {@link Player}
      */
     <M extends Player> void sendAll(Stream<M> playerStream, Predicate<M> predicate, Packet<?> packet);
-
-    /**
-     * Send {@link Player} a {@link Component} message
-     * @param in the target player
-     * @param messages the message
-     */
-    void sendMessage(Player in, Component... messages);
-
-    /**
-     * Send {@link Player} a {@code json format} message
-     * @param in the target player
-     * @param messages the message
-     */
-    void sendMessage(Player in, String... messages);
 }

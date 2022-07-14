@@ -3,6 +3,7 @@ package com.baioretto.baiolib.api.extension.meta;
 import com.baioretto.baiolib.api.Pool;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -31,5 +32,25 @@ public class ItemMetaImpl {
      */
     public static void lore(ItemMeta in, List<Component> lore) {
         Pool.get(PaperItemMeta.class).impl().lore(in, lore);
+    }
+
+    /**
+     * Get meta lore list.
+     *
+     * @param in   the {@link ItemMeta} instance
+     * @return null if no lore exist, otherwise return component list
+     */
+    public static @Nullable List<Component> lore(ItemMeta in) {
+        return Pool.get(PaperItemMeta.class).impl().lore(in);
+    }
+
+    /**
+     * Set meta display name list.
+     *
+     * @param in   the {@link ItemMeta} instance
+     * @return null if no display name can be cast to component, otherwise return component
+     */
+    public static @Nullable Component displayName(ItemMeta in) {
+        return Pool.get(PaperItemMeta.class).impl().displayName(in);
     }
 }

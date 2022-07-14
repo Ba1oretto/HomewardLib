@@ -14,9 +14,8 @@ public final class BaioLib extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        new CommandManager(this).register(new MockTest());
-
-        Bukkit.getPluginManager().registerEvents(new MockTest(), this);
+        // new CommandManager(this).register(new MockTest());
+        // Bukkit.getPluginManager().registerEvents(new MockTest(), this);
     }
 
     public BaioLib() {
