@@ -2,17 +2,18 @@ package com.baioretto.baiolib.command;
 
 import com.baioretto.baiolib.BaioLib;
 import com.baioretto.baiolib.api.Pool;
-import com.baioretto.baiolib.api.block.placer.BlockPlacer;
 import com.baioretto.baiolib.api.extension.bukkit.BukkitImpl;
 import com.baioretto.baiolib.api.extension.meta.ItemMetaImpl;
 import com.baioretto.baiolib.api.extension.sender.command.ConsoleCommandSenderImpl;
 import com.baioretto.baiolib.api.extension.sender.player.PaperPlayer;
 import com.baioretto.baiolib.api.extension.stack.ItemStackImpl;
 import com.baioretto.baiolib.api.extension.sender.player.PlayerImpl;
+import com.baioretto.baiolib.util.Util;
 import de.tr7zw.nbtapi.NBTItem;
 import lombok.SneakyThrows;
 import lombok.experimental.ExtensionMethod;
 import me.mattstudios.mf.annotations.Command;
+import me.mattstudios.mf.annotations.Default;
 import me.mattstudios.mf.annotations.SubCommand;
 import me.mattstudios.mf.base.CommandBase;
 import net.kyori.adventure.key.Key;
@@ -27,6 +28,7 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_18_R2.block.CraftBarrel;
 import org.bukkit.craftbukkit.v1_18_R2.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_18_R2.block.CraftBlockState;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
@@ -42,10 +44,14 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.UUID;
 
-@Command("test")
+@Command("baiolibtest")
 @SuppressWarnings("unused")
 @ExtensionMethod({ItemStackImpl.class, ItemMetaImpl.class, PlayerImpl.class, ConsoleCommandSenderImpl.class, BukkitImpl.class})
 public class MockTest extends CommandBase implements Listener {
+    @Default
+    public void defaultTest(CommandSender commandSender) {
+    }
+
     @SubCommand("iConsoleCommandSender$sendMessage")
     public void iConsoleCommandSender$sendMessage(CommandSender commandSender) {
         if (!(commandSender instanceof Player player)) return;
@@ -140,17 +146,12 @@ public class MockTest extends CommandBase implements Listener {
         CraftBlock block = (CraftBlock) player.getTargetBlockExact(5);
 
         if (block == null) return;
+        System.out.println(block.getHandle().getBlockState(block.getPosition()).getValues());
         CraftBlockState craftBlockState = (CraftBlockState) block.getState();
 
         BlockState blockState = craftBlockState.getHandle();
 
         blockState.getProperties().forEach(System.out::println);
-    }
-
-    @SubCommand("place")
-    public void testPlaceBlock(CommandSender commandSender) {
-        if (!(commandSender instanceof Player player)) return;
-        Pool.get(BlockPlacer.class).impl().placeNoteBlock(player.getWorld(), 10, 1145, -60, 1145);
     }
 
     @EventHandler
