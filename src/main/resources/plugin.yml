@@ -3,3 +3,6 @@ version: '${version}'
 main: com.baioretto.baiolib.BaioLib
 api-version: 1.18
 prefix: BaioLib
+
+softdepend:
+  - 'Brewing'

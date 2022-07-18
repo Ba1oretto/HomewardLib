@@ -1,5 +1,6 @@
 package com.baioretto.baiolib.util;
 
+import com.baioretto.baiolib.api.Pool;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 
@@ -93,7 +94,7 @@ public class ReflectionUtil {
      * @throws RuntimeException If an exception caught when instancing class
      * @since 1.1.0
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "ConstantConditions"})
     public <T> T getSingletonField(Class<?> from, Class<T> of, String name) {
         Field classField;
         try {
@@ -112,7 +113,13 @@ public class ReflectionUtil {
         }
 
         if (field == null) {
-            field = ReflectionUtil.newInstance(of);
+            if (Pool.ABSTRACT_API_CLASSES().get(name) != null) {
+                synchronized (Pool.ABSTRACT_API_CLASSES().get(name)) {
+                    if (field == null) {
+                        field = ReflectionUtil.newInstance(of);
+                    }
+                }
+            } else field = ReflectionUtil.newInstance(of);
 
             try {
                 classField.set(null, field);

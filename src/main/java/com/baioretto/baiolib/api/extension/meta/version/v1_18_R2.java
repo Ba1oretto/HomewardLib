@@ -66,7 +66,6 @@ public class v1_18_R2 extends IItemMeta {
         }
         if (displayName == null) return null;
 
-        System.out.println(displayName);
         return ComponentSerializer.deserialize(displayName.toString());
     }
 }

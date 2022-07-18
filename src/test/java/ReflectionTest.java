@@ -2,7 +2,10 @@ import static com.baioretto.baiolib.util.ReflectionUtil.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
+import com.baioretto.baiolib.BaioLib;
+import com.baioretto.baiolib.Temp;
 import com.baioretto.baiolib.api.Pool;
+import com.baioretto.baiolib.util.Util;
 import org.junit.jupiter.api.*;
 
 import java.lang.reflect.Constructor;
@@ -46,6 +49,11 @@ public class ReflectionTest {
         });
 
         return Arrays.asList(testAllArgumentConstructor, testNewInstanceWithAllArgumentConstructor, testNewInstance);
+    }
+
+    @Test
+    void getClassURL() {
+        System.out.println(Temp.class.getResource("api"));
     }
 }
 

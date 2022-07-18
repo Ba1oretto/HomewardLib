@@ -1,4 +1,4 @@
-package com.baioretto.baiolib.api.block.util;
+package com.baioretto.baiolib.api.block;
 
 import com.baioretto.baiolib.api.AbstractUtil;
 
