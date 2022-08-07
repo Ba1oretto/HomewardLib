@@ -6,3 +6,7 @@ prefix: BaioLib
 
 softdepend:
   - 'Brewing'
+
+permissions:
+  "baiolib.admin.reload":
+    description: "Permission to use /reload"

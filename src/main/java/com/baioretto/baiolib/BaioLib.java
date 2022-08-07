@@ -1,6 +1,8 @@
 package com.baioretto.baiolib;
 
 import com.baioretto.baiolib.command.MockTest;
+import com.baioretto.baiolib.dev.CommandListener;
+import com.baioretto.baiolib.dev.ReloadCommand;
 import com.baioretto.baiolib.dev.KeepAliveUpdater;
 import com.baioretto.baiolib.util.Util;
 import lombok.Getter;
@@ -20,25 +22,36 @@ public final class BaioLib extends JavaPlugin {
     @Getter
     private final Thread mainThread;
 
+    private CommandManager commandManager;
+
     @Override
     public void onLoad() {
-        Util.sendConsoleMessage(text("using dev profile: ", YELLOW).append(text(BaioLibConfig.isDevEnv, BaioLibConfig.isDevEnv ? GREEN : RED)));
+        Util.sendConsoleMessage(text("using dev profile: ", YELLOW).append(text(BaioLibConfig.IS_DEV_ENV, BaioLibConfig.IS_DEV_ENV ? GREEN : RED)));
     }
 
     @Override
     public void onEnable() {
-        new CommandManager(this).register(new MockTest());
-
-        if (BaioLibConfig.isDevEnv) {
-            if (Bukkit.getServer().getName().equalsIgnoreCase(BaioLibConfig.paper)) KeepAliveUpdater.start();
-        }
+        commandManager = new CommandManager(this, true);
+        enableDevelopModeFunction();
     }
 
     @Override
     public void onDisable() {
-        if (BaioLibConfig.isDevEnv) {
-            KeepAliveUpdater.stop();
-        }
+        disableDevelopModeFunction();
+    }
+
+    private void enableDevelopModeFunction() {
+        if (!BaioLibConfig.IS_DEV_ENV) return;
+        commandManager.register(new MockTest(), new ReloadCommand());
+
+        Bukkit.getPluginManager().registerEvents(new CommandListener(), this);
+
+        if (Bukkit.getServer().getName().equalsIgnoreCase(BaioLibConfig.PAPER)) KeepAliveUpdater.doStart();
+    }
+
+    private void disableDevelopModeFunction() {
+        if (!BaioLibConfig.IS_DEV_ENV) return;
+        KeepAliveUpdater.doStop();
     }
 
     public BaioLib() {

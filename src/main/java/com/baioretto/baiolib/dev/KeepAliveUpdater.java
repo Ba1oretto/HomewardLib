@@ -11,9 +11,9 @@ import net.minecraft.network.protocol.game.ClientboundKeepAlivePacket;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -39,14 +39,12 @@ public final class KeepAliveUpdater extends TimerTask {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void run() {
         // we don't run below if state not match RUNNABLE
         if (!Thread.State.RUNNABLE.equals(BaioLib.instance().mainThread().getState())) return;
 
-        long lastTime = timer.get();
         // current time - 1s > the latest update time, represent interval more than 1s
-        if (currentTimeMillis() - 1100L > lastTime) {
+        if (currentTimeMillis() - 1100L > timer.get()) {
             resetCounter();
         }
         updateTimer();
@@ -54,9 +52,7 @@ public final class KeepAliveUpdater extends TimerTask {
         if (counter.incrementAndGet() < 15) return;
         resetCounter();
 
-        List<CraftPlayer> onlinePlayers = (List<CraftPlayer>) Bukkit.getServer().getOnlinePlayers();
-
-        onlinePlayers.forEach(this::setKeepAliveTime);
+        Bukkit.getServer().getOnlinePlayers().forEach(this::setKeepAliveTime);
 
         Util.sendConsoleMessage(Component.text("Reset player alive time!", NamedTextColor.GREEN));
     }
@@ -69,8 +65,8 @@ public final class KeepAliveUpdater extends TimerTask {
         timer.set(currentTimeMillis());
     }
 
-    private void setKeepAliveTime(CraftPlayer player) {
-        ServerGamePacketListenerImpl connection = player.getHandle().connection;
+    private void setKeepAliveTime(Player player) {
+        ServerGamePacketListenerImpl connection = ((CraftPlayer) player).getHandle().connection;
         long millis = net.minecraft.Util.getMillis();
         // mock ServerGamePacketListenerImpl update alive time
         try {
@@ -107,16 +103,16 @@ public final class KeepAliveUpdater extends TimerTask {
     }
 
     /**
-     * start auto update task
+     * doStart auto update task
      */
-    public static void start() {
+    public static void doStart() {
         TASK_SCHEDULER.schedule(instance, 0L, 1000L);
     }
 
     /**
      * close auto update task
      */
-    public static void stop() {
+    public static void doStop() {
         TASK_SCHEDULER.cancel();
     }
 }
