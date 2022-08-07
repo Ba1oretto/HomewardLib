@@ -29,7 +29,7 @@ import org.bukkit.Bukkit;
  * @since 1.0.0
  */
 @UtilityClass
-@SuppressWarnings("unused")
+
 public class Wrapper {
     /**
      * Return an {@code instance} of the given class.

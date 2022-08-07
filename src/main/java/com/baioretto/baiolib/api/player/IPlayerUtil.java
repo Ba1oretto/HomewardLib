@@ -1,7 +1,6 @@
 package com.baioretto.baiolib.api.player;
 
 import com.baioretto.baiolib.annotation.Instantiable;
-import net.kyori.adventure.text.Component;
 import net.minecraft.network.protocol.Packet;
 import org.bukkit.entity.Player;
 
@@ -15,7 +14,7 @@ import java.util.stream.Stream;
  * @since 1.1.0
  */
 @Instantiable
-@SuppressWarnings("unused")
+
 public interface IPlayerUtil {
     /**
      * Send {@link Player} a {@link Packet}

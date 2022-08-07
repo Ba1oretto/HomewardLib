@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-@SuppressWarnings("unused")
+
 public class v1_18_R2 implements IItemStack {
     @SuppressWarnings("unchecked")
     @Override

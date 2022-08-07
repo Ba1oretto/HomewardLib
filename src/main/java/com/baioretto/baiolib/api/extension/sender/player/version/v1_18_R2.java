@@ -10,7 +10,7 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-@SuppressWarnings("unused")
+
 public class v1_18_R2 implements IPlayer {
     @Override
     public void sendMessage(Player in, Component... messages) {

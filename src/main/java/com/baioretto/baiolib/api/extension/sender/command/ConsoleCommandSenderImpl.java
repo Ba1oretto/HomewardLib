@@ -11,7 +11,7 @@ import org.bukkit.command.ConsoleCommandSender;
  * @author baioretto
  * @since 1.1.0
  */
-@SuppressWarnings("unused")
+
 public class ConsoleCommandSenderImpl {
     /**
      * Sends a chat message.

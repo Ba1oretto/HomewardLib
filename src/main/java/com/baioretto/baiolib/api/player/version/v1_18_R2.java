@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-@SuppressWarnings("unused")
+
 public class v1_18_R2 implements IPlayerUtil {
     @Override
     public void send(Player player, Packet<?> packet) {

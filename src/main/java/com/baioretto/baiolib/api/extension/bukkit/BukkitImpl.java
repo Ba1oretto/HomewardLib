@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
  * @author baioretto
  * @since 1.1.0
  */
-@SuppressWarnings("unused")
+
 public class BukkitImpl {
 
     /**

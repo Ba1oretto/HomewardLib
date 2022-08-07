@@ -14,7 +14,7 @@ import net.minecraft.util.LowerCaseEnumTypeAdapterFactory;
  * @since 1.1.0
  */
 @Instantiable
-@SuppressWarnings("unused")
+
 public interface IComponentUtil {
     Gson GSON = Util.get(() -> {
         GsonBuilder builder = new GsonBuilder();

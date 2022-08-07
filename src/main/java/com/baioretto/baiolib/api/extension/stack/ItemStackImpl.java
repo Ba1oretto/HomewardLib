@@ -1,16 +1,18 @@
 package com.baioretto.baiolib.api.extension.stack;
 
 import com.baioretto.baiolib.api.Pool;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The {@code ItemStackImpl} class used with {@link lombok.experimental.ExtensionMethod}
  * @author baioretto
  * @since 1.1.0
  */
-@SuppressWarnings("unused")
 public class ItemStackImpl {
     /**
      * Edits the {@link ItemMeta} of this stack.
@@ -35,5 +37,29 @@ public class ItemStackImpl {
      */
     public static <M extends ItemMeta> boolean editMeta(final ItemStack in, Class<M> metaClass, final @NotNull java.util.function.Consumer<? super ItemMeta> consumer) {
         return Pool.get(PaperItemStack.class).impl().editMeta(in, metaClass, consumer);
+    }
+
+    /**
+     * Set persistent data to item.
+     *
+     * @param in {@code ItemStack} instance
+     * @param type {@link PersistentDataType}
+     * @return true if success
+     * @param <T> generic type
+     */
+    public static <T> boolean set(final ItemStack in, NamespacedKey key, PersistentDataType<?, T> type, T value) {
+        return editMeta(in, meta -> meta.getPersistentDataContainer().set(key, type, value));
+    }
+
+    /**
+     * Get persistent data from item.
+     *
+     * @param in {@code ItemStack} instance
+     * @param type {@link PersistentDataType}
+     * @return true if success
+     */
+    public static @Nullable <T> T get(final ItemStack in, NamespacedKey key, PersistentDataType<?, T> type) {
+        ItemMeta meta = in.getItemMeta();
+        return meta == null ? null : meta.getPersistentDataContainer().get(key, type);
     }
 }

@@ -6,6 +6,7 @@ import com.baioretto.baiolib.api.extension.sender.command.PaperConsoleCommandSen
 import com.baioretto.baiolib.api.extension.sender.player.PaperPlayer;
 import com.baioretto.baiolib.api.extension.stack.PaperItemStack;
 import com.baioretto.baiolib.api.packet.PacketUtil;
+import com.baioretto.baiolib.api.persistence.PersistenceUtil;
 import com.baioretto.baiolib.api.player.PlayerUtil;
 import com.baioretto.baiolib.util.ReflectionUtil;
 import com.baioretto.baiolib.util.Util;
@@ -20,7 +21,6 @@ import java.util.HashMap;
  * @author baioretto
  * @since 1.1.0
  */
-@SuppressWarnings("unused")
 public class Pool {
     private static volatile PacketUtil packetUtil;
     private static volatile PaperItemStack paperItemStack;
@@ -28,6 +28,7 @@ public class Pool {
     private static volatile PlayerUtil playerUtil;
     private static volatile PaperPlayer paperPlayer;
     private static volatile PaperConsoleCommandSender paperConsoleCommandSender;
+    private static volatile PersistenceUtil persistenceUtil;
 
     /**
      * Get an instance of generic type T.

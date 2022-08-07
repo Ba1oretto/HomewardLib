@@ -8,7 +8,7 @@ import com.baioretto.baiolib.api.AbstractUtil;
  * @author baioretto
  * @since 1.1.0
  */
-@SuppressWarnings("unused")
+
 public class PaperConsoleCommandSender extends AbstractUtil<IConsoleCommandSender> {
     protected PaperConsoleCommandSender() {
         super(IConsoleCommandSender.class);

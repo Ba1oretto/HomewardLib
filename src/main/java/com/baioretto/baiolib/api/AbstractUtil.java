@@ -8,7 +8,7 @@ package com.baioretto.baiolib.api;
  * @author baioretto
  * @since 1.1.0
  */
-@SuppressWarnings("unused")
+
 public abstract class AbstractUtil<C> {
     /**
      * Get instance of generic type {@code C}

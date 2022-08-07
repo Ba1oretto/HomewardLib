@@ -1,15 +1,16 @@
 package com.baioretto.baiolib.util;
 
 import com.baioretto.baiolib.BaioLib;
-import com.baioretto.baiolib.api.AbstractUtil;
-import com.google.common.base.CaseFormat;
+import com.baioretto.baiolib.BaioLibConfig;
+import com.baioretto.baiolib.api.Pool;
+import com.baioretto.baiolib.api.extension.sender.command.PaperConsoleCommandSender;
 import lombok.experimental.UtilityClass;
+import net.kyori.adventure.text.Component;
 import org.reflections.Reflections;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 
-import java.util.HashMap;
 import java.util.function.Supplier;
 
 /**
@@ -19,7 +20,7 @@ import java.util.function.Supplier;
  * @since 1.1.0
  */
 @UtilityClass
-@SuppressWarnings("unused")
+
 public class Util {
     /**
      * @param function supplier
@@ -43,5 +44,14 @@ public class Util {
                 .addClassLoaders(classLoader)
                 .addUrls(ClasspathHelper.forPackage(pkg, classLoader))
                 .filterInputsBy(new FilterBuilder().includePackage(pkg)));
+    }
+
+    /**
+     * Send a message to command line.
+     *
+     * @param message the message
+     */
+    public void sendConsoleMessage(Component message) {
+        Pool.get(PaperConsoleCommandSender.class).impl().sendMessage(BaioLib.instance().getServer().getConsoleSender(), BaioLibConfig.prefix.append(message));
     }
 }

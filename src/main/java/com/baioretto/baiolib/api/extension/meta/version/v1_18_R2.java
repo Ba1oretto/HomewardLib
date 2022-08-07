@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("unused")
+
 public class v1_18_R2 extends IItemMeta {
     public v1_18_R2() {
         super("org.bukkit.craftbukkit.v1_18_R2.inventory.CraftMetaItem", "displayName", "lore");

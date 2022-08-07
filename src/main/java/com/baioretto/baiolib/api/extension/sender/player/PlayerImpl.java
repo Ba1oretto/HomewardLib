@@ -1,7 +1,6 @@
 package com.baioretto.baiolib.api.extension.sender.player;
 
 import com.baioretto.baiolib.api.Pool;
-import com.baioretto.baiolib.api.player.PlayerUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 
@@ -11,7 +10,7 @@ import org.bukkit.entity.Player;
  * @author baioretto
  * @since 1.1.0
  */
-@SuppressWarnings("unused")
+
 public class PlayerImpl {
     /**
      * Send {@link Player} a {@link Component} message

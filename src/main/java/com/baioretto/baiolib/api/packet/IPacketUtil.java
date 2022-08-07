@@ -18,7 +18,7 @@ import java.util.UUID;
  * @since 1.0.0
  */
 @Instantiable
-@SuppressWarnings("unused")
+
 public interface IPacketUtil {
     /**
      * Get {@link ClientboundLevelChunkWithLightPacket} from given parameters

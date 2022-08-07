@@ -8,7 +8,6 @@ import com.baioretto.baiolib.api.extension.sender.command.ConsoleCommandSenderIm
 import com.baioretto.baiolib.api.extension.sender.player.PaperPlayer;
 import com.baioretto.baiolib.api.extension.stack.ItemStackImpl;
 import com.baioretto.baiolib.api.extension.sender.player.PlayerImpl;
-import com.baioretto.baiolib.util.Util;
 import de.tr7zw.nbtapi.NBTItem;
 import lombok.SneakyThrows;
 import lombok.experimental.ExtensionMethod;
@@ -28,7 +27,6 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_18_R2.block.CraftBarrel;
 import org.bukkit.craftbukkit.v1_18_R2.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_18_R2.block.CraftBlockState;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
@@ -45,7 +43,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 @Command("baiolibtest")
-@SuppressWarnings("unused")
+
 @ExtensionMethod({ItemStackImpl.class, ItemMetaImpl.class, PlayerImpl.class, ConsoleCommandSenderImpl.class, BukkitImpl.class})
 public class MockTest extends CommandBase implements Listener {
     @Default
