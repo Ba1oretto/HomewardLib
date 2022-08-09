@@ -1,12 +1,15 @@
 package com.baioretto.baiolib.util;
 
 import com.baioretto.baiolib.api.Pool;
+import com.google.common.collect.ImmutableSet;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
+import org.reflections.Reflections;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static java.util.Objects.requireNonNull;
 
@@ -128,5 +131,12 @@ public class ReflectionUtil {
             }
         }
         return field;
+    }
+
+    public <T> ImmutableSet<T> getSubtypeOf(String packageName, Class<T> subtype) {
+        Reflections reflections = ServerUtil.getReflections(packageName);
+        ConcurrentLinkedQueue<T> queue = new ConcurrentLinkedQueue<>();
+        reflections.getSubTypesOf(subtype).forEach(impl -> queue.add(newInstance(impl)));
+        return ImmutableSet.copyOf(queue);
     }
 }

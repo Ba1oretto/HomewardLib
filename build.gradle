@@ -8,7 +8,7 @@ plugins {
 }
 
 group 'com.baioretto'
-version '1.4.0'
+version '1.5.0'
 
 repositories {
     mavenLocal()
@@ -45,6 +45,10 @@ dependencies {
 }
 
 dependencies {
+    compileOnly group: "com.comphenix.protocol", name: "ProtocolLib", version: "4.7.0"
+
+
+
     // nbt api
     api group: 'de.tr7zw', name: 'item-nbt-api-plugin', version: '2.10.0' // codemc public
 

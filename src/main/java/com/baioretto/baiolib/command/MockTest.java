@@ -48,6 +48,7 @@ import java.util.UUID;
 public class MockTest extends CommandBase implements Listener {
     @Default
     public void defaultTest(CommandSender commandSender) {
+        System.out.println(111);
     }
 
     @SubCommand("iConsoleCommandSender$sendMessage")

@@ -1,6 +1,6 @@
-package com.baioretto.baiolib.dev;
+package com.baioretto.baiolib.dev.command;
 
-import com.baioretto.baiolib.util.Util;
+import com.baioretto.baiolib.util.ServerUtil;
 import me.mattstudios.mf.annotations.Alias;
 import me.mattstudios.mf.annotations.Command;
 import me.mattstudios.mf.annotations.Default;
@@ -20,6 +20,6 @@ public class ReloadCommand extends CommandBase {
     @Default
     @Permission("baiolib.admin.reload")
     public void reload(CommandSender sender) {
-        Util.reload(sender);
+        ServerUtil.reload(sender);
     }
 }

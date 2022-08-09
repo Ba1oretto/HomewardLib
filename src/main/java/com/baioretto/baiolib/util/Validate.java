@@ -59,7 +59,6 @@ public class Validate {
         return string.matches("(?i)true|false");
     }
 
-
     /**
      * Get a {@code boolean} value from given {@link String}.
      *

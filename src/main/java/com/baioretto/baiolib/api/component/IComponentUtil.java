@@ -1,7 +1,7 @@
 package com.baioretto.baiolib.api.component;
 
 import com.baioretto.baiolib.annotation.Instantiable;
-import com.baioretto.baiolib.util.Util;
+import com.baioretto.baiolib.util.ServerUtil;
 import com.google.gson.*;
 import net.kyori.adventure.text.TextComponent;
 import net.minecraft.network.chat.MutableComponent;
@@ -16,7 +16,7 @@ import net.minecraft.util.LowerCaseEnumTypeAdapterFactory;
 @Instantiable
 
 public interface IComponentUtil {
-    Gson GSON = Util.get(() -> {
+    Gson GSON = ServerUtil.get(() -> {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapterFactory(new LowerCaseEnumTypeAdapterFactory());
         return builder.create();

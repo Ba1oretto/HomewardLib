@@ -3,7 +3,9 @@ package com.baioretto.baiolib.dev;
 import com.baioretto.baiolib.BaioLib;
 import com.baioretto.baiolib.api.extension.sender.command.ConsoleCommandSenderImpl;
 import com.baioretto.baiolib.exception.BaioLibInternalException;
-import com.baioretto.baiolib.util.Util;
+import com.baioretto.baiolib.util.ServerUtil;
+import lombok.Getter;
+import lombok.SneakyThrows;
 import lombok.experimental.ExtensionMethod;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -33,6 +35,9 @@ public final class KeepAliveUpdater extends TimerTask {
     private final AtomicLong timer;
     private final AtomicInteger counter;
 
+    @Getter
+    private static boolean isDebugging;
+
     private KeepAliveUpdater() {
         timer = new AtomicLong(currentTimeMillis());
         counter = new AtomicInteger(0);
@@ -41,42 +46,52 @@ public final class KeepAliveUpdater extends TimerTask {
     @Override
     public void run() {
         // we don't run below if state not match RUNNABLE
-        if (!Thread.State.RUNNABLE.equals(BaioLib.instance().mainThread().getState())) return;
+        if (!Thread.State.RUNNABLE.equals(BaioLib.instance().mainThread().getState())) {
+            isDebugging = false;
+            return;
+        }
 
         // current time - 1s > the latest update time, represent interval more than 1s
         if (currentTimeMillis() - 1100L > timer.get()) {
             resetCounter();
         }
-        updateTimer();
+        synchronousTimer();
 
-        if (counter.incrementAndGet() < 15) return;
+        if (counter.incrementAndGet() < 20) return;
         resetCounter();
 
         Bukkit.getServer().getOnlinePlayers().forEach(this::setKeepAliveTime);
 
-        Util.sendConsoleMessage(Component.text("Reset player alive time!", NamedTextColor.GREEN));
+        ServerUtil.sendConsoleMessage(Component.text("Reset player alive time!", NamedTextColor.GREEN));
     }
 
     private void resetCounter() {
         counter.set(0);
     }
 
-    private void updateTimer() {
+    private void synchronousTimer() {
         timer.set(currentTimeMillis());
     }
 
+    @SneakyThrows
     private void setKeepAliveTime(Player player) {
         ServerGamePacketListenerImpl connection = ((CraftPlayer) player).getHandle().connection;
         long millis = net.minecraft.Util.getMillis();
+
         // mock ServerGamePacketListenerImpl update alive time
         try {
-            KEEP_ALIVE_PENDING.set(connection, true);
-            KEEP_ALIVE_TIME.set(connection, millis);
-            KEEP_ALIVE_CHALLENGE.set(connection, millis);
+            KEEP_ALIVE_TIME.set(connection, millis + 100);
         } catch (IllegalAccessException e) {
             throw new BaioLibInternalException(e);
         }
+
+        if (!isDebugging) {
+            isDebugging = true;
+        }
+
         connection.send(new ClientboundKeepAlivePacket(millis));
+
+        System.out.printf("KEEP_ALIVE_PENDING: %s, KEEP_ALIVE_TIME: %s, KEEP_ALIVE_CHALLENGE: %s%n", KEEP_ALIVE_PENDING.get(connection), KEEP_ALIVE_TIME.get(connection), KEEP_ALIVE_CHALLENGE.get(connection));
     }
 
     private final static Field KEEP_ALIVE_TIME;

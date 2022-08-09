@@ -9,7 +9,7 @@ import com.baioretto.baiolib.api.packet.PacketUtil;
 import com.baioretto.baiolib.api.persistence.PersistenceUtil;
 import com.baioretto.baiolib.api.player.PlayerUtil;
 import com.baioretto.baiolib.util.ReflectionUtil;
-import com.baioretto.baiolib.util.Util;
+import com.baioretto.baiolib.util.ServerUtil;
 import com.google.common.base.CaseFormat;
 import lombok.Getter;
 
@@ -53,7 +53,7 @@ public class Pool {
     private static final HashMap<String, Class<? extends AbstractUtil>> ABSTRACT_API_CLASSES = new HashMap<>();
 
     static {
-        Util.getReflections(BaioLib.class.getPackageName() + ".api").getSubTypesOf(AbstractUtil.class).forEach(clazz -> {
+        ServerUtil.getReflections(BaioLib.class.getPackageName() + ".api").getSubTypesOf(AbstractUtil.class).forEach(clazz -> {
             String className = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, clazz.getSimpleName());
             ABSTRACT_API_CLASSES.put(className, clazz);
         });
