@@ -1,7 +1,0 @@
-shadowJar {
-    minimize()
-    archiveBaseName.set rootProject.name
-    archiveClassifier.set ''
-    archiveVersion.set project.version
-    archiveExtension.set 'jar'
-}
