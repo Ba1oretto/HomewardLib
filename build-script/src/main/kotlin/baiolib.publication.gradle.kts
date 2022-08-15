@@ -3,6 +3,7 @@ plugins {
     `java-library`
 }
 
+
 val sourceJar = task<Jar>("sourcesJar") {
     archiveClassifier.set("sources")
     from(sourceSets.main.get().allSource)
@@ -16,6 +17,7 @@ val javadocJar = task<Jar>("javadocJar") {
 }
 
 publishing {
+    apply(plugin = "baiolib.library")
     repositories {
         maven {
             name = "GitHubPackages"
@@ -36,7 +38,7 @@ publishing {
 
             artifact(javadocJar)
 
-            from(components.getByName("java"))
+            from(components["java"])
         }
     }
 }

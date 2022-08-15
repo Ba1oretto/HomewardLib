@@ -2,9 +2,8 @@ import org.gradle.api.internal.file.copy.CopyAction
 import org.gradle.api.internal.file.copy.FileCopyAction
 
 plugins {
-    id("com.github.johnrengelman.shadow")
-    id("baiolib.compile-config")
     id("baiolib.shadow-config")
+    id("baiolib.compile-config")
 }
 
 val shadowJar = tasks.getByName("shadowJar")
