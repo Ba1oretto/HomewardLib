@@ -1,0 +1,7 @@
+name: BaioLib
+main: com.baioretto.baiolib.BaioLib
+version: ${version}
+api-version: 1.18
+author: baioretto
+description: a minecraft library
+prefix: BaioLib
